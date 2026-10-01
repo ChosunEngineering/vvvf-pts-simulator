@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0b62a8"/>
+  <!-- 전차선 -->
+  <line x1="40" y1="118" x2="472" y2="118" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
+  <!-- 팬터그래프 -->
+  <path d="M210 250 L256 170 L302 250" fill="none" stroke="#e8eef7" stroke-width="16" stroke-linejoin="round"/>
+  <line x1="220" y1="124" x2="292" y2="124" stroke="#e8eef7" stroke-width="16" stroke-linecap="round"/>
+  <line x1="256" y1="124" x2="256" y2="170" stroke="#e8eef7" stroke-width="12"/>
+  <!-- 차체 -->
+  <rect x="96" y="250" width="320" height="150" rx="34" fill="#e8eef7"/>
+  <rect x="128" y="280" width="70" height="56" rx="10" fill="#0b62a8"/>
+  <rect x="221" y="280" width="70" height="56" rx="10" fill="#0b62a8"/>
+  <rect x="314" y="280" width="70" height="56" rx="10" fill="#0b62a8"/>
+  <!-- 바퀴·레일 -->
+  <circle cx="170" cy="412" r="22" fill="#17202e"/><circle cx="342" cy="412" r="22" fill="#17202e"/>
+  <line x1="60" y1="440" x2="452" y2="440" stroke="#17202e" stroke-width="12" stroke-linecap="round"/>
+</svg>
