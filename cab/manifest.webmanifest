@@ -1,0 +1,36 @@
+{
+ "name": "PTS 운전실 재구성 — 341000 VVVF",
+ "short_name": "PTS 운전실",
+ "description": "제2종 전기차량 운전면허 학습용 PTS 운전실 3D·준비점검·회로 시뮬레이터",
+ "lang": "ko",
+ "start_url": "./",
+ "scope": "./",
+ "display": "fullscreen",
+ "orientation": "any",
+ "background_color": "#0d1014",
+ "theme_color": "#15191f",
+ "version": "95d0e859",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  },
+  {
+   "src": "icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml"
+  }
+ ]
+}
