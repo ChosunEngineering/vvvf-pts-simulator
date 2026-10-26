@@ -100,6 +100,7 @@ input[type=search]{width:100%;font-size:1em;padding:12px;border-radius:10px;bord
 .sx{display:grid;grid-template-columns:3.2em 1fr;gap:4px 8px;margin:6px 0;font-size:.95em;line-height:1.45}.sx b{color:var(--sub);font-size:.8em;padding-top:2px}
 .sx ol{margin:0;padding-left:1.3em}.sx ol li{margin:2px 0}.sx .c{color:var(--ctl)}.sx .d{color:var(--cdr)}.sx .k{color:var(--warn);font-weight:700}
 .wh{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 6px}.wh span{font-size:.72em;padding:2px 7px;border-radius:8px;background:var(--chip);color:var(--sub)}.wh span.a{color:var(--hl)}
+.de.cl{padding:11px 12px;margin-bottom:6px}.de.cl h3{margin:0;font-size:.98em;cursor:pointer;display:flex;gap:6px}.de.cl h3::after{content:'▸';margin-left:auto;color:var(--sub)}.de.cl.x h3::after{content:'▾'}.de.cl .wh{margin:6px 0 0}.de.cl .bd{display:none;margin-top:8px}.de.cl.x .bd{display:block}
 .de .rv{display:none}.de.open .rv{display:block}.de .rvb{font-size:.8em;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--acc)}
 pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
 </style>
@@ -304,7 +305,7 @@ let quiz=false,only=null;
 function dicHTML(f){f=(f||'').toLowerCase();let h='';
  if(only)h+='<p class="note">이 고장 관련 구술 '+only.length+'개 · <a href="#" id="allOral" style="color:var(--acc)">6장 전체 보기</a></p>';
  C6.forEach((d,i)=>{if(only&&!only.includes(d.no))return;if(f&&!(d.no+' '+d.title+' '+d.body).toLowerCase().includes(f))return;
- h+='<div class="de'+(quiz?'':' open')+'"><h3>'+esc(d.no)+' '+esc(d.title)+'</h3>'+(quiz?'<button class="rvb" data-rv>답 보기</button>':'')+'<div class="rv"><div class="o">'+esc(d.body)+'</div></div></div>'});
+ h+='<div class="de cl'+(quiz?'':' open')+(only?' x':'')+'"><h3 data-tg>'+esc(d.no)+' '+esc(d.title)+'</h3><div class="bd">'+(quiz?'<button class="rvb" data-rv>답 보기</button>':'')+'<div class="rv"><div class="o">'+esc(d.body)+'</div></div></div></div>'});
  $('#dicB').innerHTML=h||'<p class="note">검색 결과 없음</p>';const a=$('#allOral');if(a)a.onclick=ev=>{ev.preventDefault();only=null;dicHTML($('#q').value)}}
 function openOral(list){only=list;$('#q').value='';dicHTML('');show('ovDic');$('#ovDic .ovb').scrollTop=0}
 function openRaw(list){$('#rawT').textContent='교재 5장 '+list.join('·')+' 원문';$('#rawB').textContent=list.map(n=>C5[n]?n+' '+C5[n].title+'\n'+C5[n].body:n).join('\n\n');show('ovRaw')}
@@ -318,20 +319,20 @@ function stHTML(f){f=(f||'').toLowerCase();let h='';const keys=Object.keys(C5).s
  let n=0;keys.forEach(no=>{const c=C5[no],d=ST[no]||{};if(stOnly&&!stOnly.includes(no))return;if(!stOnly&&stM==='sc'&&!WHERE[no])return;
   const txt=(no+' '+c.title+' '+JSON.stringify(d)).toLowerCase();if(f&&!txt.includes(f))return;n++;
   const wh=(WHERE[no]||[]).map(x=>'<span class="'+(x.hl?'a':'')+'">'+(x.s?'1-2':'1-1')+' · '+esc(STN[x.sec].replace('정부과천','정부'))+'→'+esc(STN[x.sec+1].replace('정부과천','정부'))+'</span>').join('');
-  h+='<div class="de'+(stQ?'':' open')+'"><h3>'+esc(no)+' '+esc(c.title)+'</h3>'+(wh?'<div class="wh">'+wh+'</div>':'');
+  h+='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+'"><h3 data-tg>'+esc(no)+' '+esc(c.title)+'</h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
   h+='<div class="sx">'+(d.sym?'<b>현상</b><div>'+esc(d.sym)+'</div>':'')+(d.cause?'<b>원인</b><div>'+esc(d.cause)+'</div>':'')+'</div>';
   if(stQ)h+='<button class="rvb" data-rv>조치 보기</button>';
-  h+='<div class="rv"><div class="sx"><b>조치</b><ol>'+(d.steps||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(d.cdr?'<b>차장</b><div class="d">'+esc(d.cdr)+'</div>':'')+(d.ctl?'<b>관제</b><div class="c">'+esc(d.ctl)+'</div>':'')+(d.key?'<b>포인트</b><div class="k">'+esc(d.key)+'</div>':'')+'</div><button class="rvb" data-raw="'+no+'">📄 원문</button></div></div>'});
+  h+='<div class="rv"><div class="sx"><b>조치</b><ol>'+(d.steps||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(d.cdr?'<b>차장</b><div class="d">'+esc(d.cdr)+'</div>':'')+(d.ctl?'<b>관제</b><div class="c">'+esc(d.ctl)+'</div>':'')+(d.key?'<b>포인트</b><div class="k">'+esc(d.key)+'</div>':'')+'</div><button class="rvb" data-raw="'+no+'">📄 원문</button></div></div></div>'});
  $('#stB').innerHTML=(stOnly?'':'<p class="note">'+n+'개 · 교재 5장 원문에서 추린 요약. 시험 전 원문(📄)으로 최종 확인.</p>')+h||'<p class="note">검색 결과 없음</p>';
  const a=$('#stAll');if(a)a.onclick=ev=>{ev.preventDefault();stOnly=null;stHTML($('#stq').value)}}
 function openSt(list){stOnly=list;$('#stq').value='';stHTML('');show('ovSt');$('#ovSt .ovb').scrollTop=0}
 $('#stq').oninput=e=>stHTML(e.target.value);
 $('#bStQ').onclick=()=>{stQ=!stQ;$('#bStQ').classList.toggle('on',stQ);stHTML($('#stq').value)};
 document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stM=b.dataset.m;stOnly=null;document.querySelectorAll('#stSeg button').forEach(x=>x.classList.toggle('on',x===b));stHTML($('#stq').value)});
-$('#stB').addEventListener('click',e=>{const r=e.target.closest('[data-raw]');if(r){openRaw([r.dataset.raw]);return}const v=e.target.closest('[data-rv]');if(v){v.closest('.de').classList.add('open');v.remove()}});
+$('#stB').addEventListener('click',e=>{const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const r=e.target.closest('[data-raw]');if(r){openRaw([r.dataset.raw]);return}const v=e.target.closest('[data-rv]');if(v){v.closest('.de').classList.add('open');v.remove()}});
 $('#q').oninput=e=>dicHTML(e.target.value);
 $('#bQuiz').onclick=()=>{quiz=!quiz;$('#bQuiz').classList.toggle('on',quiz);dicHTML($('#q').value)};
-$('#dicB').onclick=e=>{const b=e.target.closest('[data-rv]');if(b)b.closest('.de').classList.toggle('open')};
+$('#dicB').onclick=e=>{const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const b=e.target.closest('[data-rv]');if(b)b.closest('.de').classList.toggle('open')};
 async function wake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen')}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('#run').classList.contains('show'))wake()});
 homeUI();
