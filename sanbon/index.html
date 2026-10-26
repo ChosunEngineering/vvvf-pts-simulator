@@ -81,7 +81,7 @@ svg{display:block;width:100%;height:auto}
  .ln{padding:5px 0;gap:8px}.ln .w{flex-basis:2.5em}.tipline{padding:6px 9px;font-size:.84em}.tags{margin-bottom:6px}#guide{padding:4px 8px calc(4px + env(safe-area-inset-bottom))}
  #ttl{font-size:clamp(24px,7.2vw,32px);margin:2px 0 6px}}
 /* 오버레이 */
-.ov{position:fixed;inset:0;}#ovRaw{z-index:10}.ov{position:fixed;inset:0;background:var(--bg);z-index:9;display:none;flex-direction:column}.ov.show{display:flex}
+.ov{position:fixed;inset:0;}#ovRaw{z-index:11}#ovFc{z-index:10}.ov{position:fixed;inset:0;background:var(--bg);z-index:9;display:none;flex-direction:column}.ov.show{display:flex}
 .ovh{display:flex;align-items:center;gap:8px;padding:10px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--line)}
 .ovh h2{margin:0;font-size:1.05em;flex:1}
 .ovb{flex:1;overflow:auto;padding:10px 12px 40px;user-select:text}
@@ -101,6 +101,23 @@ input[type=search]{width:100%;font-size:1em;padding:12px;border-radius:10px;bord
 .sx ol{margin:0;padding-left:1.3em}.sx ol li{margin:2px 0}.sx .c{color:var(--ctl)}.sx .d{color:var(--cdr)}.sx .k{color:var(--warn);font-weight:700}
 .wh{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 6px}.wh span{font-size:.72em;padding:2px 7px;border-radius:8px;background:var(--chip);color:var(--sub)}.wh span.a{color:var(--hl)}
 .de.cl{padding:11px 12px;margin-bottom:6px}.de.cl h3{margin:0;font-size:.98em;cursor:pointer;display:flex;gap:6px}.de.cl h3::after{content:'▸';margin-left:auto;color:var(--sub)}.de.cl.x h3::after{content:'▾'}.de.cl .wh{margin:6px 0 0}.de.cl .bd{display:none;margin-top:8px}.de.cl.x .bd{display:block}
+.gp{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);overflow:hidden}
+.gh{padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.gh .gn{font-weight:900;font-size:1.05em;color:var(--acc)}.gh .gc{font-weight:800;color:var(--ok);font-size:.85em}
+.gh .gs{grid-column:1/-1;color:var(--sub);font-size:.85em}.gh .gm{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.gh .gm span{font-size:.75em;padding:2px 8px;border-radius:8px;background:var(--chip)}.gh .gm span.d{color:var(--ok);text-decoration:line-through}
+.gp .gb2{display:none;padding:0 10px 10px}.gp.x .gb2{display:block}.gp.x .gh .gm{display:none}.gp.x .gh{border-bottom:1px solid var(--line);margin-bottom:10px}
+.fl{background:color-mix(in srgb,var(--acc) 12%,transparent);border-radius:10px;padding:8px 10px;margin-bottom:10px;font-size:.92em}.fl b{color:var(--acc)}.fl ol{margin:4px 0 0;padding-left:1.3em}.fl li{margin:2px 0}
+.de.cl h3 .lb{flex:0 0 auto;font-size:.78em;padding:2px 8px;border-radius:8px;background:var(--acc);color:#fff;align-self:center}.de.cl h3 .tt{flex:1}.de.cl h3 .ck{color:var(--ok);flex:0 0 auto}
+.de.dn h3 .tt{color:var(--sub)}.stb{display:flex;gap:8px;margin-top:8px}.dnb{color:var(--ok)!important;border-color:var(--ok)!important}
+.fcbar{height:5px;background:var(--chip)}.fcbar i{display:block;height:100%;width:0;background:var(--ok);transition:width .2s}
+#fcB{font-size:1.02em}.fq .lbs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.fq .lbs span{font-size:.78em;padding:3px 9px;border-radius:8px;background:var(--chip);color:var(--sub)}.fq .lbs span.g{background:var(--acc);color:#fff}
+.fq h3{font-size:1.25em;margin:4px 0 10px;line-height:1.35}.fq .cue{background:var(--chip);border-radius:12px;padding:10px 12px;line-height:1.5}.fq .cue b{color:var(--sub);font-size:.8em;display:block}
+.fq .ask{margin:14px 0 6px;color:var(--warn);font-weight:800}.fq .ans{margin-top:12px}
+#fcA{display:flex;gap:8px;padding:10px 12px max(12px,env(safe-area-inset-bottom));border-top:1px solid var(--line)}#fcA button{flex:1;font-size:1.05em;font-weight:900;padding:16px 6px;border-radius:14px;border:0;color:#fff}
+.b0{background:var(--bad)}.b1{background:var(--warn)!important;color:#111!important}.b2{background:var(--ok)}.bA{background:var(--acc)}.bG{background:var(--chip)!important;color:var(--tx)!important;border:1px solid var(--line)!important}
+.oq{display:flex;flex-direction:column;gap:6px;margin-top:10px}.oq button{text-align:left;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:.95em}.oq button.ok{background:color-mix(in srgb,var(--ok) 25%,transparent);border-color:var(--ok)}.oq button.ng{animation:sh .3s;border-color:var(--bad)}
+@keyframes sh{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.bx{font-size:.72em;font-weight:900;padding:1px 6px;border-radius:6px;flex:0 0 auto;align-self:center}.bx0{background:var(--bad);color:#fff}.bx1{background:var(--warn);color:#111}.bx2{background:var(--acc);color:#fff}.bx3{background:var(--ok);color:#111}
+.fe{text-align:center;padding:30px 10px}.fe .big{font-size:2.4em;font-weight:900}.fe .row3{display:flex;justify-content:center;gap:14px;margin:14px 0;font-weight:800}
 .de .rv{display:none}.de.open .rv{display:block}.de .rvb{font-size:.8em;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--acc)}
 pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
 </style>
@@ -144,7 +161,8 @@ pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
 <div class="ov" id="ovList"><div class="ovh"><h2>목차 (눌러서 이동)</h2><button class="hb" data-close>닫기</button></div><div class="ovb" id="listB"></div></div>
 <div class="ov" id="ovTip"><div class="ovh"><h2>역간 운전 요령</h2><div class="seg2" id="tipSeg"><button data-d="up" class="on">상선</button><button data-d="dn">하선</button></div><button class="hb" data-close>닫기</button></div><div class="ovb" id="tipB"></div></div>
 <div class="ov" id="ovDic"><div class="ovh"><h2>구술 · 6장 이례 사항</h2><button class="hb" id="bQuiz">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><input type="search" id="q" placeholder="검색 (예: BVN, 화재, 6.27)"><div id="dicB"></div></div></div>
-<div class="ov" id="ovSt"><div class="ovh"><h2>고장 학습표 · 5장</h2><button class="hb" id="bStQ">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><div class="seg2" id="stSeg" style="margin-bottom:10px"><button data-m="sc" class="on" style="flex:1">시나리오 고장</button><button data-m="all" style="flex:1">5장 전체 62</button></div><input type="search" id="stq" placeholder="검색 (예: BVN, 화재, MCBOS)"><div id="stB"></div></div></div>
+<div class="ov" id="ovSt"><div class="ovh"><h2>고장 학습표 · 5장</h2><button class="hb" id="bFc" style="background:var(--acc);color:#fff">🃏 문제</button><button class="hb" id="bStQ">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><div class="seg2" id="stSeg" style="margin-bottom:10px"><button data-m="grp" class="on" style="flex:1">조치 방법별</button><button data-m="sc" style="flex:1">시나리오 20</button><button data-m="all" style="flex:1">전체 62</button></div><input type="search" id="stq" placeholder="검색 (예: BVN, 화재, MCBOS)"><div id="stB"></div></div></div>
+<div class="ov" id="ovFc"><div class="ovh"><h2 id="fcT">문제 풀기</h2><button class="hb" data-close>닫기</button></div><div class="fcbar"><i id="fcBar"></i></div><div class="ovb" id="fcB"></div><div id="fcA"></div></div>
 <div class="ov" id="ovRaw"><div class="ovh"><h2 id="rawT">5장 원문</h2><button class="hb" data-close>닫기</button></div><div class="ovb"><pre id="rawB"></pre></div></div>
 
 <script>
@@ -310,26 +328,91 @@ function dicHTML(f){f=(f||'').toLowerCase();let h='';
 function openOral(list){only=list;$('#q').value='';dicHTML('');show('ovDic');$('#ovDic .ovb').scrollTop=0}
 function openRaw(list){$('#rawT').textContent='교재 5장 '+list.join('·')+' 원문';$('#rawB').textContent=list.map(n=>C5[n]?n+' '+C5[n].title+'\n'+C5[n].body:n).join('\n\n');show('ovRaw')}
 
-// 고장 학습표 (5장 원문 → 현상·원인·조치·관제·차장·포인트)
-let stQ=false,stM='sc',stOnly=null;
+// 고장 학습표 (5장) — 묶음별(조치 방법) / 시나리오 / 전체
+const GRP=[
+ {n:'RS 리셋',h:'MCBOS-RS-3초 후 MCBCS 로 복귀',f:['동력 핸들 OFF','모니터 지적 “○호차 ○○ 발생”, “Fault등 점등”','차장: “차량 고장 발생, 안내 방송 바랍니다.”','관제: “○○ 발생, 조치 후 보고하겠습니다.”','MCBOS-RS-3초 후 MCBCS → “MCB 투입” “SIV 점등”','모니터 운전 화면 전환','관제: “RS 취급으로 정상 복귀되어 전도 운전” · 차장: “조치 완료”'],
+  m:{'5.39':'Fault등 공통','5.18':'SIV 고장','5.26':'L1 차단','5.19':'SIV 통신(IVCN 후 RS)','5.40':'주변환기 통신(CIN 후 RS)','5.25':'DC→AC MCB 절연 불량'}},
+ {n:'차단기 차단·복귀',h:'배전반 ○○N 차단 → 정상 복귀',f:['동력 핸들 OFF (비상제동 걸리면 정차 후 7단)','차장: 고장 정차 안내 방송 요청','관제: “○○ 발생/정차, 확인 후 보고하겠습니다.”','배전반 열고 “○○N 차단, 정상 복귀”','정상 확인(계기·ADU·MCB 등) → 배전반 닫음','관제: “○○N 차단되었으나 정상 복귀되어 전도 운전”','차장: “조치 완료, 발차 전호 바랍니다.” → 버저·발차'],
+  m:{'5.10':'ATCN','5.17':'BVN1·2','5.20':'HCRN','5.21':'MCN','5.28':'DMVN1·2','5.30':'CrSN','5.31':'DILPN','5.38':'PLPN (후부)','5.41':'EODN','5.43':'MON·MOAN','5.44':'EAN','5.19':'IVCN','5.40':'CIN'}},
+ {n:'COS 차단 (승인 운전)',h:'복귀 불능 → 관제 승인 번호 → COS 차단',f:['복귀 불능 확인 (2~3회 시도)','관제 보고 → 운전 명령(승인) 번호 수신·복창','해당 COS/스위치 차단','제동 핸들 4단 → 차장 통보','지시 속도로 주의 운전','해소 지점에서 COS 정상'],
+  m:{'5.2':'ATSCOS','5.11':'ATCCOS','5.15':'EBCOS (DSD)','5.27':'DIRS (비연동)'}},
+ {n:'신호 · ATC 이상',h:'정지 환호 → 신호기 바깥 정차 → 관제 확인',f:['“○○ 정지” 환호, 동력 OFF','상용제동으로 신호기 바깥 정차 (갑자기 현시되면 비상제동)','차장: 정지신호로 정차 안내 방송','관제: 신호 상태 확인 요청','운전 명령 번호 수신 → 지시대로 (15km/h 확인 운전 등)'],
+  m:{'5.1':'출발·장내 정지 (ATS)','5.3':'폐색 R1','5.4':'폐색 R0','5.5':'임시 신호기','5.6':'40모드','5.7':'ATC 차상 고장 (EB)','5.8':'ATC 지상 고장 (NB)','5.9':'진로 개통 불량','5.12':'STOP·15모드','5.62':'방호 신호 수신'}},
+ {n:'제동 이상',h:'제동 상태 지적 → 해당 스위치 → 제동 시험',f:['제동 이상 상태 지적 환호','해당 취급 (ScBS / CpRS / 압력 확인)','BC 압력·모니터 압력 화면 확인','필요 시 제동 시험','관제·차장 보고 후 운전'],
+  m:{'5.13':'보안제동 ScBS','5.14':'불완해 CpRS','5.16':'주 공기압 저하','5.17':'BVN 비상제동','5.20':'HCRN 비상제동'}},
+ {n:'교-직 절연 · EPanDS',h:'MCB 양 소등 → 즉시 EPanDS → 다음 역에서 조치',f:['MCB 양 소등·과전류 지적 → 즉시 EPanDS','(절연 구간 40km/h 이하)','차장·관제: 고장 발생, EPanDS 취급 운전 중','다음 역(남태령·선바위) 정차 → 정위치·출입문·안전문','EPanDS 복귀 → Pan 상승 → MCB 투입','불능 차는 완전 부동 → 연장 급전'],
+  m:{'5.22':'AC→DC MCB 양 소등','5.23':'DC→AC MCB 양 소등','5.24':'AC→DC 절연 불량','5.25':'DC→AC 절연 불량','5.55':'전차선 장애'}},
+ {n:'출입문 · 안전문',h:'“○○ 불능” 지적 → 차장 재취급 → 회로/버튼 조치',f:['모니터·DOOR등 확인 → “○○ 열림(닫힘) 불능”','차장: 재취급·확인 조치 요청','관제: 불능 통보, 조치 후 보고','회로 조치 (CrSN·DMVN·DILPN) 또는 LSBS·DIRS·조작반 전체 버튼','닫힘·열림 확인 (HMI)','관제 보고 → 발차'],
+  m:{'5.27':'1개 닫힘 불능','5.28':'1량 열림 불능','5.29':'ZVR 고장','5.30':'CrSN 차단','5.31':'DILPN 차단','5.32':'전 편성 닫힘 불능','5.33':'1개 열림 불능','5.34':'일부 안전문 닫힘 불능','5.35':'전체 안전문 닫힘 불능','5.36':'일부 안전문 열림 불능','5.37':'전체 안전문 열림 불능','5.58':'정위치 지나 정차'}},
+ {n:'비상정차 · 현장 조치',h:'기적 + 비상제동 → 보고·출동 요청 → 현장',f:['(비상)기적 취명 + 비상제동 정차','차장: 정차 안내 방송 (승객 분승·대피)','관제: 상황 보고, 119·역장·관계처 출동 요청','현장 조치 (방호·확인·소화·제거)','완료 보고 → 차장 발차 전호 → 발차'],
+  m:{'5.47':'선로 침수','5.48':'경미 화재 (다음 역까지)','5.49':'발차 시 화재 (퇴행)','5.50':'화재 운행 불가','5.51':'역사 화재','5.52':'사상 사고','5.53':'쓰러진 사람','5.54':'선로 보행자','5.56':'낙석','5.57':'객실 비상 통화','5.59':'선행 열차','5.60':'탈선 인접선 지장'}},
+ {n:'단전',h:'관제에 단전 여부·급전 시기 확인',f:['동력 핸들 OFF','차장: 단전 안내 방송','관제: 단전 여부·급전 시기 확인','순간 단전: MCBOS → MCBCS (제동 중이면 RS)','장시간: 최근 역까지 무동력 → 정차 후 유치 조치'],
+  m:{'5.45':'순간 단전','5.46':'장시간 단전'}},
+ {n:'보고 후 계속 운전',h:'지적·보고하고 그대로 또는 순차 취급',f:['현상 지적 환호','필요 시 관제 보고','그대로 / 순차 취급하여 전도 운전'],
+  m:{'5.42':'주 변압기 과열','5.61':'공전 (1-2-3-4)'}}
+];
+let stQ=false,stM='grp',stOnly=null,stOpenG=null;
+let BOX=ls.get('sbu5.box',{});const bx=no=>(BOX[no]||{}).b;const DONE=new Proxy({},{get:(t,no)=>bx(no)>=3});
+const BXL=['모름','애매','거의','외움'];
 function stWhere(){const w={};[0,1].forEach(s=>SC[s].items.forEach(it=>{const sc=it.scr||(SCR[s]||{})[SC[s].items.indexOf(it)];(sc&&sc.src||[]).forEach(n=>{const a=w[n]=w[n]||[];if(!a.some(x=>x.s===s&&x.sec===it.s))a.push({s,sec:it.s,t:it.t,hl:it.hl})})}));return w}
 const WHERE=stWhere();
-function stHTML(f){f=(f||'').toLowerCase();let h='';const keys=Object.keys(C5).sort((a,b)=>+a.split('.')[1]-+b.split('.')[1]);
- if(stOnly)h+='<p class="note">이 고장 학습표 · <a href="#" id="stAll" style="color:var(--acc)">전체 보기</a></p>';
- let n=0;keys.forEach(no=>{const c=C5[no],d=ST[no]||{};if(stOnly&&!stOnly.includes(no))return;if(!stOnly&&stM==='sc'&&!WHERE[no])return;
-  const txt=(no+' '+c.title+' '+JSON.stringify(d)).toLowerCase();if(f&&!txt.includes(f))return;n++;
-  const wh=(WHERE[no]||[]).map(x=>'<span class="'+(x.hl?'a':'')+'">'+(x.s?'1-2':'1-1')+' · '+esc(STN[x.sec].replace('정부과천','정부'))+'→'+esc(STN[x.sec+1].replace('정부과천','정부'))+'</span>').join('');
-  h+='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+'"><h3 data-tg>'+esc(no)+' '+esc(c.title)+'</h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
-  h+='<div class="sx">'+(d.sym?'<b>현상</b><div>'+esc(d.sym)+'</div>':'')+(d.cause?'<b>원인</b><div>'+esc(d.cause)+'</div>':'')+'</div>';
-  if(stQ)h+='<button class="rvb" data-rv>조치 보기</button>';
-  h+='<div class="rv"><div class="sx"><b>조치</b><ol>'+(d.steps||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(d.cdr?'<b>차장</b><div class="d">'+esc(d.cdr)+'</div>':'')+(d.ctl?'<b>관제</b><div class="c">'+esc(d.ctl)+'</div>':'')+(d.key?'<b>포인트</b><div class="k">'+esc(d.key)+'</div>':'')+'</div><button class="rvb" data-raw="'+no+'">📄 원문</button></div></div></div>'});
- $('#stB').innerHTML=(stOnly?'':'<p class="note">'+n+'개 · 교재 5장 원문에서 추린 요약. 시험 전 원문(📄)으로 최종 확인.</p>')+h||'<p class="note">검색 결과 없음</p>';
+const SNO=Object.keys(C5).sort((a,b)=>+a.split('.')[1]-+b.split('.')[1]);
+function stCard(no,lab,f){const c=C5[no],d=ST[no]||{};if(f&&!(no+' '+c.title+' '+(lab||'')+' '+JSON.stringify(d)).toLowerCase().includes(f))return'';
+ const wh=(WHERE[no]||[]).map(x=>'<span class="'+(x.hl?'a':'')+'">'+(x.s?'1-2':'1-1')+' · '+esc(STN[x.sec].replace('정부과천','정부'))+'→'+esc(STN[x.sec+1].replace('정부과천','정부'))+'</span>').join('');
+ let h='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+(DONE[no]?' dn':'')+'" data-no="'+no+'"><h3 data-tg>'+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+((BOX[no]||{}).miss>=3?'<span class="bx bx0">⚠ 자주 틀림</span>':'')+(lab?'<span class="lb">'+esc(lab)+'</span>':'')+'<span class="tt">'+esc(no)+' '+esc(c.title)+'</span></h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
+ h+='<div class="sx">'+(d.sym?'<b>현상</b><div>'+esc(d.sym)+'</div>':'')+(d.cause?'<b>원인</b><div>'+esc(d.cause)+'</div>':'')+'</div>';
+ if(stQ)h+='<button class="rvb" data-rv>조치 보기</button>';
+ h+='<div class="rv"><div class="sx"><b>조치</b><ol>'+(d.steps||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(d.cdr?'<b>차장</b><div class="d">'+esc(d.cdr)+'</div>':'')+(d.ctl?'<b>관제</b><div class="c">'+esc(d.ctl)+'</div>':'')+(d.key?'<b>포인트</b><div class="k">'+esc(d.key)+'</div>':'')+'</div></div>';
+ h+='<div class="stb"><button class="rvb" data-raw="'+no+'">📄 원문</button><button class="rvb dnb" data-fc1="'+no+'">🃏 이것만 풀기</button></div></div></div>';return h}
+function stHTML(f){f=(f||'').toLowerCase();let h='';
+ if(stOnly){h+='<p class="note">이 고장 학습표 · <a href="#" id="stAll" style="color:var(--acc)">전체 보기</a></p>';stOnly.forEach(no=>{const g=GRP.find(g=>g.m[no]);h+=stCard(no,g&&g.m[no],'')})}
+ else if(stM==='grp'){const tot=SNO.length,dn=SNO.filter(n=>DONE[n]).length;
+  h+='<p class="note">① 묶음을 열어 <b>공통 흐름</b>을 먼저 익히고 ② 고장마다 다른 부분(차단기 이름 등)만 외운 뒤 ③ <b>🃏 문제</b>로 떠올려 보세요. 외움 '+dn+'/'+tot+'</p>';
+  GRP.forEach((g,gi)=>{const ks=Object.keys(g.m).sort((a,b)=>+a.split('.')[1]-+b.split('.')[1]);const body=ks.map(no=>stCard(no,g.m[no],f)).join('');if(f&&!body)return;
+   const dn=ks.filter(n=>DONE[n]).length,op=f||stOpenG===gi;
+   h+='<div class="gp'+(op?' x':'')+'"><div class="gh" data-g="'+gi+'"><span class="gn">'+esc(g.n)+'</span><span class="gc">'+dn+'/'+ks.length+'</span><div class="gs">'+esc(g.h)+'</div><div class="gm">'+ks.map(no=>'<span class="'+(DONE[no]?'d':'')+'">'+esc(g.m[no])+'</span>').join('')+'</div></div>';
+   h+='<div class="gb2"><button class="rvb" data-fcg="'+gi+'" style="width:100%;margin-bottom:10px;padding:12px;font-weight:900;background:var(--acc);color:#fff;border:0">🃏 이 묶음 '+ks.length+'문제 풀기</button><div class="fl"><b>공통 흐름</b><ol>'+g.f.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>'+body+'</div></div>'})}
+ else{let n=0;SNO.forEach(no=>{if(stM==='sc'&&!WHERE[no])return;const g=GRP.find(g=>g.m[no]);const c=stCard(no,g&&g.m[no],f);if(c){n++;h+=c}});h='<p class="note">'+n+'개 · 교재 5장 원문에서 추린 요약. 시험 전 원문(📄)으로 최종 확인.</p>'+h}
+ $('#stB').innerHTML=h||'<p class="note">검색 결과 없음</p>';
  const a=$('#stAll');if(a)a.onclick=ev=>{ev.preventDefault();stOnly=null;stHTML($('#stq').value)}}
 function openSt(list){stOnly=list;$('#stq').value='';stHTML('');show('ovSt');$('#ovSt .ovb').scrollTop=0}
 $('#stq').oninput=e=>stHTML(e.target.value);
 $('#bStQ').onclick=()=>{stQ=!stQ;$('#bStQ').classList.toggle('on',stQ);stHTML($('#stq').value)};
 document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stM=b.dataset.m;stOnly=null;document.querySelectorAll('#stSeg button').forEach(x=>x.classList.toggle('on',x===b));stHTML($('#stq').value)});
-$('#stB').addEventListener('click',e=>{const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const r=e.target.closest('[data-raw]');if(r){openRaw([r.dataset.raw]);return}const v=e.target.closest('[data-rv]');if(v){v.closest('.de').classList.add('open');v.remove()}});
+$('#stB').addEventListener('click',e=>{const gh=e.target.closest('[data-g]');if(gh){const gi=+gh.dataset.g,p_=gh.parentNode,o=!p_.classList.contains('x');document.querySelectorAll('#stB .gp.x').forEach(x=>x.classList.remove('x'));p_.classList.toggle('x',o);stOpenG=o?gi:null;if(o)p_.scrollIntoView({block:'start'});return}
+ const f1=e.target.closest('[data-fc1]');if(f1){fcStart([f1.dataset.fc1],'1문제');return}const fg=e.target.closest('[data-fcg]');if(fg){const g=GRP[+fg.dataset.fcg];fcStart(Object.keys(g.m),g.n);return}
+ const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const r=e.target.closest('[data-raw]');if(r){openRaw([r.dataset.raw]);return}const v=e.target.closest('[data-rv]');if(v){v.closest('.de').classList.add('open');v.remove()}});
+
+// 🃏 문제 풀기: 능동 회상 + 자기 평가(모름/애매/앎) + 라이트너 상자 + 순서 맞추기
+let FQ=[],FN=0,FC={},fcStage=0,fcOrd=null;
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function fcStart(list,name){const by=[0,1,2,3,null];FQ=[];by.forEach(b=>FQ.push(...shuf(list.filter(n=>(bx(n)==null?null:Math.min(bx(n),3))===b))));
+ FN=FQ.length;FC={k:0,h:0,a:0};$('#fcT').textContent='🃏 '+name+' · '+FN+'문제';show('ovFc');fcShow()}
+function fcScope(){if(stOnly)return[stOnly,'이 고장'];if(stM==='grp'&&stOpenG!=null){const g=GRP[stOpenG];return[Object.keys(g.m),g.n]}
+ if(stM==='sc')return[SNO.filter(n=>WHERE[n]),'시나리오 고장'];return[SNO.slice(),'5장 전체']}
+function fcShow(){fcStage=0;fcOrd=null;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*100:100)+'%';
+ if(!FQ.length){const t=FC.k+FC.h+FC.a;$('#fcB').innerHTML='<div class="fe"><div class="big">끝!</div><div class="row3"><span style="color:var(--ok)">앎 '+FC.a+'</span><span style="color:var(--warn)">애매 '+FC.h+'</span><span style="color:var(--bad)">모름 '+FC.k+'</span></div><p class="note">모름은 다음에 먼저 나옵니다. 3번 이상 틀린 건 ⚠ 표시.</p></div>';
+  $('#fcA').innerHTML='<button class="bG" data-fx="close">목록으로</button><button class="bA" data-fx="weak">약한 것만 다시</button>';return}
+ const no=FQ[0],c=C5[no],d=ST[no]||{},g=GRP.find(g=>g.m[no]);
+ let h='<div class="fq"><div class="lbs">'+(g?'<span class="g">'+esc(g.n)+'</span><span>'+esc(g.m[no])+'</span>':'')+'<span>'+esc(no)+'</span>'+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+'</div>';
+ h+='<h3>'+esc(c.title)+'</h3>'+(d.sym?'<div class="cue"><b>현상</b>'+esc(d.sym)+'</div>':'')+'<div class="ask">조치 순서와 차장·관제 통화를 소리 내어 말해 보세요.</div><div id="fcX"></div></div>';
+ $('#fcB').innerHTML=h;$('#fcB').scrollTop=0;
+ $('#fcA').innerHTML=((d.steps||[]).length>2?'<button class="bG" data-fx="ord">순서 맞추기</button>':'')+'<button class="bA" data-fx="rev">답 보기</button>'}
+function fcAns(){const no=FQ[0],d=ST[no]||{};fcStage=1;
+ $('#fcX').innerHTML='<div class="ans sx"><b>조치</b><ol>'+(d.steps||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(d.cdr?'<b>차장</b><div class="d">'+esc(d.cdr)+'</div>':'')+(d.ctl?'<b>관제</b><div class="c">'+esc(d.ctl)+'</div>':'')+(d.key?'<b>포인트</b><div class="k">'+esc(d.key)+'</div>':'')+'</div><button class="rvb" data-raw="'+no+'" style="margin-top:8px">📄 원문</button>';
+ $('#fcA').innerHTML='<button class="b0" data-r="0">모름<br><small>곧 다시</small></button><button class="b1" data-r="1">애매<br><small>뒤로</small></button><button class="b2" data-r="2">앎<br><small>통과</small></button>'}
+function fcOrder(){const d=ST[FQ[0]]||{};const st=d.steps||[];fcOrd={i:0,st};
+ $('#fcX').innerHTML='<div class="ask" style="color:var(--acc)">처음 단계부터 차례로 누르세요</div><div class="oq">'+shuf(st.map((s,i)=>[s,i])).map(([s,i])=>'<button data-oi="'+i+'">'+esc(s)+'</button>').join('')+'</div>';
+ $('#fcA').innerHTML='<button class="bA" data-fx="rev">답 보기</button>'}
+function fcRate(r){const no=FQ.shift(),o=BOX[no]||{b:0,miss:0};
+ if(r===0){o.b=0;o.miss=(o.miss||0)+1;FC.k++;FQ.splice(Math.min(3,FQ.length),0,no)}
+ else if(r===1){o.b=1;FC.h++;FQ.push(no)}else{o.b=Math.min(3,(o.b==null?1:o.b)+1);FC.a++}
+ BOX[no]=o;ls.set('sbu5.box',BOX);fcShow()}
+$('#ovFc').addEventListener('click',e=>{const r=e.target.closest('[data-r]');if(r){fcRate(+r.dataset.r);return}
+ const x=e.target.closest('[data-fx]');if(x){const v=x.dataset.fx;if(v==='rev')fcAns();else if(v==='ord')fcOrder();else if(v==='close'){$('#ovFc').classList.remove('show');stHTML($('#stq').value)}else if(v==='weak'){const [l]=fcScope();const w=l.filter(n=>bx(n)!=null&&bx(n)<2);if(w.length)fcStart(w,'약한 것');else fcShow()}return}
+ const oi=e.target.closest('[data-oi]');if(oi&&fcOrd){if(+oi.dataset.oi===fcOrd.i){oi.classList.add('ok');oi.disabled=true;oi.insertAdjacentHTML('afterbegin',(fcOrd.i+1)+'. ');fcOrd.i++;if(fcOrd.i>=fcOrd.st.length)setTimeout(fcAns,400)}else{oi.classList.remove('ng');void oi.offsetWidth;oi.classList.add('ng');fcOrd.miss=(fcOrd.miss||0)+1}return}
+ const rw=e.target.closest('[data-raw]');if(rw)openRaw([rw.dataset.raw])});
+$('#bFc').onclick=()=>{const [l,n]=fcScope();fcStart(l,n)};
 $('#q').oninput=e=>dicHTML(e.target.value);
 $('#bQuiz').onclick=()=>{quiz=!quiz;$('#bQuiz').classList.toggle('on',quiz);dicHTML($('#q').value)};
 $('#dicB').onclick=e=>{const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const b=e.target.closest('[data-rv]');if(b)b.closest('.de').classList.toggle('open')};
