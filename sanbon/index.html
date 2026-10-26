@@ -136,6 +136,18 @@ input[type=search]{width:100%;font-size:1em;padding:12px;border-radius:10px;bord
 .fv{flex:0 0 auto;font-size:1.25em;line-height:1;color:var(--sub);padding:0 4px;cursor:pointer}.fv.on{color:#f5c518}
 .de .rv{display:none}.de.open .rv{display:block}.de .rvb{font-size:.8em;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--acc)}
 pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
+
+/* v25 모바일·태블릿 */
+#guide{display:flex;flex-direction:column;max-height:44vh;overflow-y:auto;overscroll-behavior:contain;flex-shrink:0}
+#gHead{order:0;position:sticky;top:-6px;background:var(--card);z-index:2}#svTrack{order:1;max-height:20vh}#flow{order:2}#legend{order:3}#svGrad{order:4;max-height:9vh}#way{order:5}#gNote{order:6}
+#way{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex-shrink:0}#way::-webkit-scrollbar{display:none}
+#guide.min{max-height:none}
+#tName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ovh h2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.ovh .hb{flex-shrink:0;white-space:nowrap}
+.seg2 button{white-space:nowrap}
+#fcA button{white-space:nowrap}
+@media (max-width:420px){.ovh h2{font-size:1em}.seg2 button{font-size:.78em;padding-left:4px;padding-right:4px}#fcA button{font-size:.92em}#guide{max-height:40vh}}
+@media (min-width:700px){#guide{max-height:40vh}#flow .fs .v{font-size:1.15em}}
 </style>
 </head>
 <body>
@@ -260,13 +272,13 @@ function trackSVG(si,list,cur){const VW=NARROW()?520:1000,TH=200;$('#svTrack').s
  for(let n=1;n<=B;n++){const x=x0+W*(1-n/(B+1));s+='<line x1="'+x+'" y1="'+(Y-8)+'" x2="'+x+'" y2="'+(Y+8)+'" stroke="var(--tx)" stroke-width="3"/><text x="'+x+'" y="'+(Y-12)+'" text-anchor="middle" font-size="17" font-weight="700" fill="var(--sub)">'+CN[n-1]+'</text>'}
  // 신호기·표지 (선로 아래, 2줄 엇갈림)
  const W2=WAY[si]||[];let last=[-999,-999,-999];const GAP=NARROW()?78:110;
- W2.forEach(([q,k,nm],i)=>{if(k==='dep'||k==='arr')return;const x=x0+W*q;let row=[0,1,2].find(r=>x-last[r]>GAP);if(row===undefined)row=[0,1,2].reduce((a,r)=>last[r]<last[a]?r:a,0);last[row]=x;const ly=Y+12+row*38;
+ W2.forEach(([q,k,nm],i)=>{if(k==='dep'||k==='arr')return;const x=x0+W*q;const lw=(k==='lim'||k==='rel'||k==='atc'||(NARROW()&&k!=='sig'))?32:nm.length*16+26,rtx=x>x1-70,lL=rtx?x-lw:x-16,lR=rtx?x+16:x+lw;let row=[0,1,2].find(r=>lL>last[r]+6);if(row===undefined)row=[0,1,2].reduce((a,r)=>last[r]<last[a]?r:a,0);last[row]=lR;const ly=Y+12+row*38;
   if(k==='sig'){s+='<line x1="'+x+'" y1="'+Y+'" x2="'+x+'" y2="'+(ly+4)+'" stroke="var(--sub)" stroke-width="2"/><rect x="'+(x-9)+'" y="'+(ly+2)+'" width="18" height="26" rx="5" fill="#111" stroke="var(--tx)" stroke-width="2"/><circle cx="'+x+'" cy="'+(ly+9)+'" r="4" fill="var(--ok)"/><circle cx="'+x+'" cy="'+(ly+20)+'" r="4" fill="var(--dn)"/>'}
   else if(k==='lim'){s+='<circle cx="'+x+'" cy="'+(ly+15)+'" r="14" fill="#fff" stroke="#e5534b" stroke-width="4"/><text x="'+x+'" y="'+(ly+21)+'" text-anchor="middle" font-size="16" font-weight="900" fill="#111">'+esc(nm)+'</text>'}
   else if(k==='rel'){s+='<circle cx="'+x+'" cy="'+(ly+15)+'" r="13" fill="#fff" stroke="#888" stroke-width="3"/><line x1="'+(x-9)+'" y1="'+(ly+24)+'" x2="'+(x+9)+'" y2="'+(ly+6)+'" stroke="#111" stroke-width="3"/>'}
   else if(k==='atc'){s+='<rect x="'+(x-8)+'" y="'+(ly+6)+'" width="16" height="18" rx="3" fill="var(--ok)"/>'}
   else{s+='<rect x="'+(x-5)+'" y="'+(ly+8)+'" width="10" height="14" rx="2" fill="var(--warn)"/>'}
-  const rt=x>x1-70;if(k!=='lim'&&!(NARROW()&&k!=='sig'&&k!=='atc'))s+='<text x="'+(rt?x-12:x+(k==='rel'?16:12))+'" text-anchor="'+(rt?'end':'start')+'" y="'+(ly+20)+'" font-size="15" font-weight="800" fill="'+(k==='atc'?'var(--ok)':k==='sig'?'var(--tx)':k==='rel'?'var(--sub)':'var(--warn)')+'">'+esc(k==='rel'?'':nm)+'</text>'});
+  const rt=x>x1-70;if(k!=='lim'&&k!=='atc'&&!(NARROW()&&k!=='sig'))s+='<text x="'+(rt?x-12:x+(k==='rel'?16:12))+'" text-anchor="'+(rt?'end':'start')+'" y="'+(ly+20)+'" font-size="15" font-weight="800" fill="'+(k==='atc'?'var(--ok)':k==='sig'?'var(--tx)':k==='rel'?'var(--sub)':'var(--warn)')+'">'+esc(k==='rel'?'':nm)+'</text>'});
  [[x0,STN[si]],[x1,STN[si+1]]].forEach(([x,n])=>{s+='<rect x="'+(x-44)+'" y="'+(Y-14)+'" width="88" height="28" rx="6" fill="var(--card)" stroke="var(--ok)" stroke-width="3"/><text x="'+x+'" y="'+(Y+7)+'" text-anchor="middle" font-size="19" font-weight="800" fill="var(--tx)">'+esc(n.replace('정부과천','정부'))+'</text>'});
  // 고장 마커 (선로 위)
  const used=[];list.forEach((it,k)=>{let x=x0+W*posOf(it);while(used.some(u=>Math.abs(u-x)<46))x+=46;used.push(x);const on=it===cur,col=it.rt?'var(--ok)':it.hl?'var(--hl)':'var(--bad)';
@@ -425,7 +437,7 @@ function fcStart(list,name){const by=[0,1,2,3,null];FQ=[];by.forEach(b=>FQ.push(
  FN=FQ.length;FC={k:0,h:0,a:0};$('#fcT').textContent='🃏 '+name;show('ovFc');fcShow()}
 function fcScope(){if(stOnly)return[stOnly,'이 고장'];if(stM==='grp'&&stOpenG!=null){const g=GRP[stOpenG];return[Object.keys(g.m),g.n]}
  if(stM==='sc')return[SNO.filter(n=>WHERE[n]),'시나리오 고장'];if(stM==='fav')return[SNO.filter(n=>FAV[n]),'★ 즐겨찾기'];return[SNO.slice(),'5장 전체']}
-const fcL=()=>QZ[FQ[0]]||[];const quizable=l=>!l.ex&&l.who!=='note';
+const fcL=()=>(QZ[FQ[0]]||[]).filter(l=>!(l.who==='note'&&l.t.startsWith('▶ 현상')));const quizable=l=>!l.ex&&l.who!=='note';
 function lnHTML(l,cls){const w=WHO[l.who]||WHO.act;return '<div class="ln '+l.who+(cls||'')+'"><span class="w" style="background:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'}
 function fcAuto(){const L=fcL();while(fcI<L.length&&!quizable(L[fcI]))fcI++}
 function fcShow(){fcI=0;fcMiss=0;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*100:100)+'%';
