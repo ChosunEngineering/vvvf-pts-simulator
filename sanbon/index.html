@@ -121,6 +121,8 @@ input[type=search]{width:100%;font-size:1em;padding:12px;border-radius:10px;bord
 .bx{font-size:.72em;font-weight:900;padding:1px 6px;border-radius:6px;flex:0 0 auto;align-self:center}.bx0{background:var(--bad);color:#fff}.bx1{background:var(--warn);color:#111}.bx2{background:var(--acc);color:#fff}.bx3{background:var(--ok);color:#111}
 .fe{text-align:center;padding:30px 10px}.fe .big{font-size:2.4em;font-weight:900}.fe .row3{display:flex;justify-content:center;gap:14px;margin:14px 0;font-weight:800}
 .sx1{margin:6px 0;line-height:1.5}.sx1>b{color:var(--sub);font-size:.8em}.vs{margin:4px 0 0;padding-left:1.4em}.vs>li{margin:6px 0;font-weight:700}.vs ul{margin:3px 0 0;padding-left:1.1em;font-weight:400}.vs ul li{margin:2px 0;list-style:'– '}.vs li.d{color:var(--cdr)}.vs li.c{color:var(--ctl)}
+.de.cl h3{flex-wrap:wrap;align-items:center}.de.cl h3 .tt{flex:1 1 70%;min-width:0}.de.cl h3::after{order:9}
+.fv{flex:0 0 auto;font-size:1.25em;line-height:1;color:var(--sub);padding:0 4px;cursor:pointer}.fv.on{color:#f5c518}
 .de .rv{display:none}.de.open .rv{display:block}.de .rvb{font-size:.8em;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--acc)}
 pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
 </style>
@@ -163,8 +165,8 @@ pre{white-space:pre-wrap;font-family:inherit;line-height:1.6;margin:0}
 
 <div class="ov" id="ovList"><div class="ovh"><h2>목차 (눌러서 이동)</h2><button class="hb" data-close>닫기</button></div><div class="ovb" id="listB"></div></div>
 <div class="ov" id="ovTip"><div class="ovh"><h2>역간 운전 요령</h2><div class="seg2" id="tipSeg"><button data-d="up" class="on">상선</button><button data-d="dn">하선</button></div><button class="hb" data-close>닫기</button></div><div class="ovb" id="tipB"></div></div>
-<div class="ov" id="ovDic"><div class="ovh"><h2>구술 · 6장 이례 사항</h2><button class="hb" id="bQuiz">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><input type="search" id="q" placeholder="검색 (예: BVN, 화재, 6.27)"><div id="dicB"></div></div></div>
-<div class="ov" id="ovSt"><div class="ovh"><h2>고장 학습표 · 5장</h2><button class="hb" id="bFc" style="background:var(--acc);color:#fff">🃏 문제</button><button class="hb" id="bStQ">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><div class="seg2" id="stSeg" style="margin-bottom:10px"><button data-m="grp" class="on" style="flex:1">조치 방법별</button><button data-m="sc" style="flex:1">시나리오 20</button><button data-m="all" style="flex:1">전체 62</button></div><input type="search" id="stq" placeholder="검색 (예: BVN, 화재, MCBOS)"><div id="stB"></div></div></div>
+<div class="ov" id="ovDic"><div class="ovh"><h2>구술 · 6장</h2><button class="hb" id="bFavO" style="color:#f5c518">★ 0</button><button class="hb" id="bQuiz">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><input type="search" id="q" placeholder="검색 (예: BVN, 화재, 6.27)"><div id="dicB"></div></div></div>
+<div class="ov" id="ovSt"><div class="ovh"><h2>고장 학습표 · 5장</h2><button class="hb" id="bFc" style="background:var(--acc);color:#fff">🃏 문제</button><button class="hb" id="bStQ">가리기</button><button class="hb" data-close>닫기</button></div><div class="ovb"><div class="seg2" id="stSeg" style="margin-bottom:10px"><button data-m="grp" class="on" style="flex:1">조치 방법별</button><button data-m="sc" style="flex:1">시나리오 20</button><button data-m="all" style="flex:1">전체 62</button><button data-m="fav" style="flex:.8;color:#f5c518">★ 0</button></div><input type="search" id="stq" placeholder="검색 (예: BVN, 화재, MCBOS)"><div id="stB"></div></div></div>
 <div class="ov" id="ovFc"><div class="ovh"><h2 id="fcT">문제 풀기</h2><button class="hb" data-close>닫기</button></div><div class="fcbar"><i id="fcBar"></i></div><div class="ovb" id="fcB"></div><div id="fcA"></div></div>
 <div class="ov" id="ovRaw"><div class="ovh"><h2 id="rawT">5장 원문</h2><button class="hb" data-close>닫기</button></div><div class="ovb"><pre id="rawB"></pre></div></div>
 
@@ -316,7 +318,7 @@ $('#oHl').onclick=()=>{opt.hl=!opt.hl;homeUI()};$('#oPrep').onclick=()=>{opt.pre
 $('#oTh').onclick=()=>{opt.th=opt.th==='dark'?'light':'dark';document.documentElement.dataset.theme=opt.th;homeUI()};
 function show(id){document.getElementById(id).classList.add('show')}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.ov').classList.remove('show'));
-document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{if(b.dataset.open==='tip'){tipTable('up');show('ovTip')}else if(b.dataset.open==='st'){openSt(null)}else{only=null;dicHTML('');show('ovDic')}});
+document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{if(b.dataset.open==='tip'){tipTable('up');show('ovTip')}else if(b.dataset.open==='st'){openSt(null)}else{only=null;favCnt();dicHTML('');show('ovDic')}});
 $('#bList').onclick=()=>{let h='',ls_=-1;F.forEach((x,i)=>{if(x.prep&&ls_!=='p'){h+='<div class="li sh">준비점검 (교재 3장)</div>';ls_='p'}else if(!x.prep&&x.s!==ls_&&!x.end){h+='<div class="li sh">'+esc(SEC[x.s].n)+'</div>';ls_=x.s}h+='<div class="li'+(x.hl?' hl':'')+(i===p?' cur':'')+'" data-i="'+i+'"><div class="s">'+(i+1)+'. '+esc(x.at)+'</div><div class="t">'+esc(x.t)+'</div></div>'});
  $('#listB').innerHTML=h;show('ovList');const c=$('#listB .cur');if(c)c.scrollIntoView({block:'center'})};
 $('#listB').onclick=e=>{const t=e.target.closest('[data-i]');if(!t)return;p=+t.dataset.i;render();$('#ovList').classList.remove('show')};
@@ -325,10 +327,11 @@ document.querySelectorAll('#tipSeg button').forEach(b=>b.onclick=()=>tipTable(b.
 let quiz=false,only=null;
 function dicHTML(f){f=(f||'').toLowerCase();let h='';
  if(only)h+='<p class="note">이 고장 관련 구술 '+only.length+'개 · <a href="#" id="allOral" style="color:var(--acc)">6장 전체 보기</a></p>';
- C6.forEach((d,i)=>{if(only&&!only.includes(d.no))return;if(f&&!(d.no+' '+d.title+' '+d.body).toLowerCase().includes(f))return;
- h+='<div class="de cl'+(quiz?'':' open')+(only?' x':'')+'"><h3 data-tg>'+esc(d.no)+' '+esc(d.title)+'</h3><div class="bd">'+(quiz?'<button class="rvb" data-rv>답 보기</button>':'')+'<div class="rv"><div class="o">'+esc(d.body)+'</div></div></div></div>'});
+ if(favO)h+='<p class="note">'+(Object.keys(FAV).some(k=>k.startsWith('6.'))?'★ 즐겨찾기만 보는 중 · 다시 누르면 전체':'제목 옆 ☆을 누르면 여기 모입니다.')+'</p>';
+ C6.forEach((d,i)=>{if(only&&!only.includes(d.no))return;if(favO&&!FAV[d.no])return;if(f&&!(d.no+' '+d.title+' '+d.body).toLowerCase().includes(f))return;
+ h+='<div class="de cl'+(quiz?'':' open')+(only?' x':'')+'"><h3 data-tg>'+star(d.no)+'<span class="tt">'+esc(d.no)+' '+esc(d.title)+'</span></h3><div class="bd">'+(quiz?'<button class="rvb" data-rv>답 보기</button>':'')+'<div class="rv"><div class="o">'+esc(d.body)+'</div></div></div></div>'});
  $('#dicB').innerHTML=h||'<p class="note">검색 결과 없음</p>';const a=$('#allOral');if(a)a.onclick=ev=>{ev.preventDefault();only=null;dicHTML($('#q').value)}}
-function openOral(list){only=list;$('#q').value='';dicHTML('');show('ovDic');$('#ovDic .ovb').scrollTop=0}
+function openOral(list){favCnt();only=list;$('#q').value='';dicHTML('');show('ovDic');$('#ovDic .ovb').scrollTop=0}
 function openRaw(list){$('#rawT').textContent='교재 5장 '+list.join('·')+' 원문';$('#rawB').textContent=list.map(n=>C5[n]?n+' '+C5[n].title+'\n'+C5[n].body:n).join('\n\n');show('ovRaw')}
 
 // 고장 학습표 (5장) — 묶음별(조치 방법) / 시나리오 / 전체
@@ -355,6 +358,9 @@ const GRP=[
   m:{'5.42':'주 변압기 과열','5.61':'공전 (1-2-3-4)'}}
 ];
 let stQ=false,stM='grp',stOnly=null,stOpenG=null;
+let FAV=ls.get('sbu5.fav',{});const star=no=>'<span class="fv'+(FAV[no]?' on':'')+'" data-fav="'+no+'">'+(FAV[no]?'★':'☆')+'</span>';
+function favT(no){if(FAV[no])delete FAV[no];else FAV[no]=1;ls.set('sbu5.fav',FAV);document.querySelectorAll('[data-fav="'+no+'"]').forEach(e=>{e.classList.toggle('on',!!FAV[no]);e.textContent=FAV[no]?'★':'☆'});favCnt()}
+function favCnt(){const b=document.querySelector('#stSeg [data-m=fav]');if(b)b.textContent='★ '+Object.keys(FAV).filter(k=>k.startsWith('5.')).length;const q=$('#bFavO');if(q)q.textContent='★ '+Object.keys(FAV).filter(k=>k.startsWith('6.')).length}
 let BOX=ls.get('sbu5.box',{});const bx=no=>(BOX[no]||{}).b;const DONE=new Proxy({},{get:(t,no)=>bx(no)>=3});
 const BXL=['모름','애매','거의','외움'];
 function stWhere(){const w={};[0,1].forEach(s=>SC[s].items.forEach(it=>{const sc=it.scr||(SCR[s]||{})[SC[s].items.indexOf(it)];(sc&&sc.src||[]).forEach(n=>{const a=w[n]=w[n]||[];if(!a.some(x=>x.s===s&&x.sec===it.s))a.push({s,sec:it.s,t:it.t,hl:it.hl})})}));return w}
@@ -364,7 +370,7 @@ function who(s){return /차장님/.test(s)?'d':/관제실|관제사/.test(s)?'c'
 function stepsHTML(d){return '<ol class="vs">'+(d.steps||[]).map(s=>'<li>'+(s.t?'<div>'+esc(s.t)+'</div>':'')+(s.sub.length?'<ul>'+s.sub.map(x=>'<li class="'+who(x)+'">'+esc(x)+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>'+((d.notes||[]).length?'<div class="k" style="margin-top:6px">'+d.notes.map(n=>'※ '+esc(n)).join('<br>')+'</div>':'')}
 function stCard(no,lab,f){const c=C5[no],d=ST[no]||{};if(f&&!(no+' '+c.title+' '+(lab||'')+' '+JSON.stringify(d)).toLowerCase().includes(f))return'';
  const wh=(WHERE[no]||[]).map(x=>'<span class="'+(x.hl?'a':'')+'">'+(x.s?'1-2':'1-1')+' · '+esc(STN[x.sec].replace('정부과천','정부'))+'→'+esc(STN[x.sec+1].replace('정부과천','정부'))+'</span>').join('');
- let h='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+(DONE[no]?' dn':'')+'" data-no="'+no+'"><h3 data-tg>'+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+((BOX[no]||{}).miss>=3?'<span class="bx bx0">⚠ 자주 틀림</span>':'')+(lab?'<span class="lb">'+esc(lab)+'</span>':'')+'<span class="tt">'+esc(no)+' '+esc(c.title)+'</span></h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
+ let h='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+(DONE[no]?' dn':'')+'" data-no="'+no+'"><h3 data-tg>'+star(no)+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+((BOX[no]||{}).miss>=3?'<span class="bx bx0">⚠ 자주 틀림</span>':'')+(lab?'<span class="lb">'+esc(lab)+'</span>':'')+'<span class="tt">'+esc(no)+' '+esc(c.title)+'</span></h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
  h+='<div class="sx">'+(d.sym?'<b>현상</b><div>'+esc(d.sym)+'</div>':'')+'</div>';
  if(stQ)h+='<button class="rvb" data-rv>조치 보기</button>';
  h+='<div class="rv"><div class="sx1"><b>조치 (5장 원문 순서)</b>'+stepsHTML(d)+'</div></div>';
@@ -377,14 +383,14 @@ function stHTML(f){f=(f||'').toLowerCase();let h='';
    const dn=ks.filter(n=>DONE[n]).length,op=f||stOpenG===gi;
    h+='<div class="gp'+(op?' x':'')+'"><div class="gh" data-g="'+gi+'"><span class="gn">'+esc(g.n)+'</span><span class="gc">'+dn+'/'+ks.length+'</span><div class="gs">'+esc(g.h)+'</div><div class="gm">'+ks.map(no=>'<span class="'+(DONE[no]?'d':'')+'">'+esc(g.m[no])+'</span>').join('')+'</div></div>';
    h+='<div class="gb2"><button class="rvb" data-fcg="'+gi+'" style="width:100%;margin-bottom:10px;padding:12px;font-weight:900;background:var(--acc);color:#fff;border:0">🃏 이 묶음 '+ks.length+'문제 풀기</button><div class="fl"><b>공통 흐름</b><ol>'+g.f.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>'+body+'</div></div>'})}
- else{let n=0;SNO.forEach(no=>{if(stM==='sc'&&!WHERE[no])return;const g=GRP.find(g=>g.m[no]);const c=stCard(no,g&&g.m[no],f);if(c){n++;h+=c}});h='<p class="note">'+n+'개 · 교재 5장 원문에서 추린 요약. 시험 전 원문(📄)으로 최종 확인.</p>'+h}
+ else{let n=0;SNO.forEach(no=>{if(stM==='sc'&&!WHERE[no])return;if(stM==='fav'&&!FAV[no])return;const g=GRP.find(g=>g.m[no]);const c=stCard(no,g&&g.m[no],f);if(c){n++;h+=c}});h='<p class="note">'+(stM==='fav'?(n?'★ 즐겨찾기 '+n+'개 · 🃏 문제로 이것만 풀 수 있습니다.':'제목 옆 ☆을 누르면 여기 모입니다.'):n+'개 · 교재 5장 원문 순서.')+'</p>'+h}
  $('#stB').innerHTML=h||'<p class="note">검색 결과 없음</p>';
  const a=$('#stAll');if(a)a.onclick=ev=>{ev.preventDefault();stOnly=null;stHTML($('#stq').value)}}
-function openSt(list){stOnly=list;$('#stq').value='';stHTML('');show('ovSt');$('#ovSt .ovb').scrollTop=0}
+function openSt(list){favCnt();stOnly=list;$('#stq').value='';stHTML('');show('ovSt');$('#ovSt .ovb').scrollTop=0}
 $('#stq').oninput=e=>stHTML(e.target.value);
 $('#bStQ').onclick=()=>{stQ=!stQ;$('#bStQ').classList.toggle('on',stQ);stHTML($('#stq').value)};
 document.querySelectorAll('#stSeg button').forEach(b=>b.onclick=()=>{stM=b.dataset.m;stOnly=null;document.querySelectorAll('#stSeg button').forEach(x=>x.classList.toggle('on',x===b));stHTML($('#stq').value)});
-$('#stB').addEventListener('click',e=>{const gh=e.target.closest('[data-g]');if(gh){const gi=+gh.dataset.g,p_=gh.parentNode,o=!p_.classList.contains('x');document.querySelectorAll('#stB .gp.x').forEach(x=>x.classList.remove('x'));p_.classList.toggle('x',o);stOpenG=o?gi:null;if(o)p_.scrollIntoView({block:'start'});return}
+$('#stB').addEventListener('click',e=>{const fv=e.target.closest('[data-fav]');if(fv){favT(fv.dataset.fav);if(stM==='fav'){const y=$('#ovSt .ovb').scrollTop;stHTML($('#stq').value);$('#ovSt .ovb').scrollTop=y}return}const gh=e.target.closest('[data-g]');if(gh){const gi=+gh.dataset.g,p_=gh.parentNode,o=!p_.classList.contains('x');document.querySelectorAll('#stB .gp.x').forEach(x=>x.classList.remove('x'));p_.classList.toggle('x',o);stOpenG=o?gi:null;if(o)p_.scrollIntoView({block:'start'});return}
  const f1=e.target.closest('[data-fc1]');if(f1){fcStart([f1.dataset.fc1],'1문제');return}const fg=e.target.closest('[data-fcg]');if(fg){const g=GRP[+fg.dataset.fcg];fcStart(Object.keys(g.m),g.n);return}
  const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const r=e.target.closest('[data-raw]');if(r){openRaw([r.dataset.raw]);return}const v=e.target.closest('[data-rv]');if(v){v.closest('.de').classList.add('open');v.remove()}});
 
@@ -394,7 +400,7 @@ function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()
 function fcStart(list,name){const by=[0,1,2,3,null];FQ=[];by.forEach(b=>FQ.push(...shuf(list.filter(n=>(bx(n)==null?null:Math.min(bx(n),3))===b))));
  FN=FQ.length;FC={k:0,h:0,a:0};$('#fcT').textContent='🃏 '+name;show('ovFc');fcShow()}
 function fcScope(){if(stOnly)return[stOnly,'이 고장'];if(stM==='grp'&&stOpenG!=null){const g=GRP[stOpenG];return[Object.keys(g.m),g.n]}
- if(stM==='sc')return[SNO.filter(n=>WHERE[n]),'시나리오 고장'];return[SNO.slice(),'5장 전체']}
+ if(stM==='sc')return[SNO.filter(n=>WHERE[n]),'시나리오 고장'];if(stM==='fav')return[SNO.filter(n=>FAV[n]),'★ 즐겨찾기'];return[SNO.slice(),'5장 전체']}
 const fcL=()=>QZ[FQ[0]]||[];const quizable=l=>!l.ex&&l.who!=='note';
 function lnHTML(l,cls){const w=WHO[l.who]||WHO.act;return '<div class="ln '+l.who+(cls||'')+'"><span class="w" style="background:'+w[1]+'">'+w[0]+'</span><span class="t">'+esc(l.t)+(l.ex?'<span class="ex">예시</span>':'')+'</span></div>'}
 function fcAuto(){const L=fcL();while(fcI<L.length&&!quizable(L[fcI]))fcI++}
@@ -402,7 +408,7 @@ function fcShow(){fcI=0;fcMiss=0;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*1
  if(!FQ.length){$('#fcB').innerHTML='<div class="fe"><div class="big">끝!</div><div class="row3"><span style="color:var(--ok)">앎 '+FC.a+'</span><span style="color:var(--warn)">애매 '+FC.h+'</span><span style="color:var(--bad)">모름 '+FC.k+'</span></div><p class="note">모름은 다음에 먼저 나옵니다. 3번 이상 틀린 건 ⚠ 표시.</p></div>';
   $('#fcA').innerHTML='<button class="bG" data-fx="close">목록으로</button><button class="bA" data-fx="weak">약한 것만 다시</button>';return}
  const no=FQ[0],c=C5[no],d=ST[no]||{},g=GRP.find(g=>g.m[no]);
- $('#fcB').innerHTML='<div class="fq"><div class="lbs">'+(g?'<span class="g">'+esc(g.n)+'</span><span>'+esc(g.m[no])+'</span>':'')+'<span>'+esc(no)+'</span><span>'+(FN-FQ.length+1)+'/'+FN+'</span>'+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+'</div>'+
+ $('#fcB').innerHTML='<div class="fq"><div class="lbs">'+(g?'<span class="g">'+esc(g.n)+'</span><span>'+esc(g.m[no])+'</span>':'')+'<span>'+esc(no)+'</span><span>'+(FN-FQ.length+1)+'/'+FN+'</span>'+star(no)+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+'</div>'+
   '<h3>'+esc(c.title)+'</h3>'+(d.sym?'<div class="cue"><b>현상</b>'+esc(d.sym)+'</div>':'')+'<div class="ask">'+(fcMode==='rec'?'다음 줄을 소리 내어 말하고 → 탭해서 확인':'다음에 올 줄을 고르세요')+'</div><div id="fcX"></div></div>';
  fcAuto();fcDraw()}
 function fcDraw(nw){const L=fcL();let h='';
@@ -420,7 +426,7 @@ function fcRate(r){const no=FQ.shift(),o=BOX[no]||{b:0,miss:0};
  if(r===0){o.b=0;o.miss=(o.miss||0)+1;FC.k++;FQ.splice(Math.min(3,FQ.length),0,no)}
  else if(r===1){o.b=1;FC.h++;FQ.push(no)}else{o.b=Math.min(3,(o.b==null?1:o.b)+1);FC.a++}
  BOX[no]=o;ls.set('sbu5.box',BOX);fcShow()}
-$('#ovFc').addEventListener('click',e=>{const r=e.target.closest('[data-r]');if(r){fcRate(+r.dataset.r);return}
+$('#ovFc').addEventListener('click',e=>{const fv=e.target.closest('[data-fav]');if(fv){favT(fv.dataset.fav);return}const r=e.target.closest('[data-r]');if(r){fcRate(+r.dataset.r);return}
  const x=e.target.closest('[data-fx]');if(x){const v=x.dataset.fx;
   if(v==='next')fcNext();else if(v==='all'){const nw=fcI;fcI=fcL().length;fcDraw(nw)}
   else if(v==='mode'){fcMode=fcMode==='rec'?'pick':'rec';ls.set('sbu5.fcm',fcMode);$('#ovFc .ask')&&($('#ovFc .ask').textContent=fcMode==='rec'?'다음 줄을 소리 내어 말하고 → 탭해서 확인':'다음에 올 줄을 고르세요');fcDraw()}
@@ -432,7 +438,8 @@ $('#ovFc').addEventListener('click',e=>{const r=e.target.closest('[data-r]');if(
 $('#bFc').onclick=()=>{const [l,n]=fcScope();fcStart(l,n)};
 $('#q').oninput=e=>dicHTML(e.target.value);
 $('#bQuiz').onclick=()=>{quiz=!quiz;$('#bQuiz').classList.toggle('on',quiz);dicHTML($('#q').value)};
-$('#dicB').onclick=e=>{const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const b=e.target.closest('[data-rv]');if(b)b.closest('.de').classList.toggle('open')};
+let favO=false;$('#bFavO').onclick=()=>{favO=!favO;$('#bFavO').classList.toggle('on',favO);dicHTML($('#q').value)};
+$('#dicB').onclick=e=>{const fv=e.target.closest('[data-fav]');if(fv){favT(fv.dataset.fav);if(favO)dicHTML($('#q').value);return}const g=e.target.closest('[data-tg]');if(g){g.parentNode.classList.toggle('x');return}const b=e.target.closest('[data-rv]');if(b)b.closest('.de').classList.toggle('open')};
 async function wake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen')}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('#run').classList.contains('show'))wake()});
 homeUI();
