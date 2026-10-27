@@ -185,6 +185,9 @@ body{word-break:keep-all;overflow-wrap:break-word}
 @keyframes mp{50%{opacity:.6}}
 #micBar{display:none;font-size:.78em;font-weight:800;text-align:center;padding:3px 8px;background:var(--chip);color:var(--sub)}
 #micBar.on{display:block}#micBar.ok{background:var(--ok);color:#000}
+
+/* v31 고장 카드 색 통일: 형광 고장도 일반 고장과 같은 색 */
+#ttl.hl{color:inherit}.li.hl .t{color:inherit}.fc.hl,.fc.hl b{color:inherit}.fc.hl b{color:var(--bad)}.fc.cur.hl b{color:#fff}.wh span.a{color:inherit}
 </style>
 </head>
 <body>
@@ -332,7 +335,7 @@ function trackSVG(si,list,cur){const VW=NARROW()?520:1000,TH=200;$('#svTrack').s
   const rt=x>x1-70;if(!noLab&&k!=='lim'&&k!=='atc'&&!(NARROW()&&k!=='sig'))s+='<text x="'+(rt?x-12:x+(k==='rel'?16:12))+'" text-anchor="'+(rt?'end':'start')+'" y="'+(ly+20)+'" font-size="15" font-weight="800" fill="'+(k==='atc'?'var(--ok)':k==='sig'?'var(--tx)':k==='rel'?'var(--sub)':'var(--warn)')+'">'+esc(k==='rel'?'':nm)+'</text>'});
  [[x0,STN[si]],[x1,STN[si+1]]].forEach(([x,n])=>{s+='<rect x="'+(x-44)+'" y="'+(Y-14)+'" width="88" height="28" rx="6" fill="var(--card)" stroke="var(--ok)" stroke-width="3"/><text x="'+x+'" y="'+(Y+7)+'" text-anchor="middle" font-size="19" font-weight="800" fill="var(--tx)">'+esc(n.replace('정부과천','정부'))+'</text>'});
  // 고장 마커 (선로 위)
- const used=[];list.forEach((it,k)=>{let x=x0+W*posOf(it);while(used.some(u=>Math.abs(u-x)<46))x+=46;used.push(x);const on=it===cur,col=it.rt?'var(--ok)':it.hl?'var(--hl)':'var(--bad)';
+ const used=[];list.forEach((it,k)=>{let x=x0+W*posOf(it);while(used.some(u=>Math.abs(u-x)<46))x+=46;used.push(x);const on=it===cur,col=it.rt?'var(--ok)':'var(--bad)';
   s+='<line x1="'+x+'" y1="'+(on?44:40)+'" x2="'+x+'" y2="'+(Y-6)+'" stroke="'+col+'" stroke-width="3" stroke-dasharray="4 3"/>';
   s+='<circle cx="'+x+'" cy="'+(on?22:21)+'" r="'+(on?21:16)+'" fill="'+(on?col:'var(--card)')+'" stroke="'+col+'" stroke-width="4"/><text x="'+x+'" y="'+(on?30:28)+'" text-anchor="middle" font-size="'+(on?24:19)+'" font-weight="900" fill="'+(on?'#111':col)+'">'+(it.rt?'A':list.filter(x=>!x.rt).indexOf(it)+1)+'</text>'});
  return s}
@@ -353,7 +356,7 @@ function render(){
   $('#route').innerHTML=routeHTML(it.end?9:si);flRender();
   const fl=list.filter(x=>!x.rt),fk=fl.indexOf(it);$('#at').textContent=it.end?'남태령 도착 · 사업 종료':(it.rt?'정상 취급 · ':fk>=0?'고장 '+(fk+1)+'/'+fl.length+' · ':'')+it.at;
   $('#ttl').textContent=it.t;$('#ttl').className=it.hl?'hl':'';
-  let tg='';if(it.rt)tg+='<span class="tag" style="color:var(--ok);border-color:var(--ok)">정상 취급 · 필수</span>';if(it.m)tg+='<span class="tag man">수동조작</span>';if(it.hl)tg+='<span class="tag hl">형광 · 후반 적용</span>';
+  let tg='';if(it.rt)tg+='<span class="tag" style="color:var(--ok);border-color:var(--ok)">정상 취급 · 필수</span>';if(it.m)tg+='<span class="tag man">수동조작</span>';if(it.hl)tg+='<span class="tag">형광 · 후반 적용</span>';
   (it.c||[]).forEach(c=>tg+='<span class="tag">'+esc(c)+'</span>');if(it.q)tg+='<span class="tag q">⚠ '+esc(it.q)+'</span>';
   if(it.end)tg+='<span class="tag">'+esc(SC[st].legend)+'</span>';
   $('#tags').innerHTML=tg;
@@ -368,7 +371,7 @@ function render(){
   $('#gSec').textContent=sec.n+'  '+(DIST[si]?DIST[si].toLocaleString()+'m':'');$('#gWarn').textContent=/제동 주의/.test(sec.g||'')?'제동 주의':'';$('#gWarn').style.display=$('#gWarn').textContent?'':'none';
   $('#gIdx').textContent='역간 '+(secs.indexOf(si)+1)+'/'+secs.length;
   $('#svTrack').innerHTML=trackSVG(si,list,it);$('#way').innerHTML=(WAY[si]||[]).filter(w=>w[3]).map(w=>'<span>'+(w[1]==='lim'?'⭕':w[1]==='rel'?'⊘':w[1]==='sig'?'🚦':w[1]==='atc'?'🔁':w[1]==='dep'?'▶':w[1]==='arr'?'⏹':'▪')+' '+esc(w[1]==='lim'?'제한'+w[2]:w[2])+' <b>'+esc(w[3])+'</b></span>').join('');$('#svGrad').innerHTML=gradSVG(si);$('#flow').innerHTML=flowHTML(si);
-  $('#legend').innerHTML=list.map((x,j)=>'<span data-j="'+F.indexOf(x)+'" class="'+(x===it?'cur':'')+'" style="'+(x.hl&&x!==it?'color:var(--hl)':'')+'">'+(x.rt?'A':list.filter(y=>!y.rt).indexOf(x)+1)+'. '+esc(x.t)+'</span>').join('');
+  $('#legend').innerHTML=list.map((x,j)=>'<span data-j="'+F.indexOf(x)+'" class="'+(x===it?'cur':'')+'" >'+(x.rt?'A':list.filter(y=>!y.rt).indexOf(x)+1)+'. '+esc(x.t)+'</span>').join('');
   $('#gNote').textContent=(GRAD[si]&&GRAD[si].n||'')+(sec.q?' · ⚠ '+sec.q:'');
   const nx=F[p+1];$('#nextUp').innerHTML=nx?'터치 ▸ 다음: <b>'+esc(nx.t)+'</b>'+(nx.s!==it.s&&!nx.end?' <span style="color:var(--ok)">('+esc(SEC[nx.s].n)+')</span>':''):'마지막입니다';
   const c=$('#card');c.style.animation='none';void c.offsetWidth;c.style.animation='';fade();
