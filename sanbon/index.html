@@ -188,6 +188,25 @@ body{word-break:keep-all;overflow-wrap:break-word}
 
 /* v31 고장 카드 색 통일: 형광 고장도 일반 고장과 같은 색 */
 #ttl.hl{color:inherit}.li.hl .t{color:inherit}.fc.hl,.fc.hl b{color:inherit}.fc.hl b{color:var(--bad)}.fc.cur.hl b{color:#fff}.wh span.a{color:inherit}
+
+/* v33 차분한 카드: 색은 역할 이름과 빨간 기기명만 */
+.ln{padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.ln .w{background:none!important;border:0!important;text-align:left;font-size:.7em;font-weight:800;padding:3px 0 0;flex-basis:3.3em;opacity:.9}
+.ln .t,.ln.me .t,.ln.pt .t,.ln.tc .t,.ln.tk .t{color:var(--tx);font-weight:500}
+.ln.me .t,.ln.pt .t,.ln.tc .t,.ln.tk .t{font-weight:700}
+.ln.tc .t{border-left:3px solid var(--cdr);padding-left:8px}.ln.tk .t{border-left:3px solid var(--ctl);padding-left:8px}
+.ln.cdr .t,.ln.ctl .t{color:var(--sub);font-weight:400}
+.ln.cdr .w,.ln.ctl .w{color:var(--sub)!important}
+.ln.note .t{color:var(--sub)}
+.dv{border:0;background:none!important;padding:0;margin:0;color:var(--bad);font-weight:800}
+.kd{border:0;color:var(--bad);font-weight:700}
+.nm{color:inherit;font-weight:900}
+.ln .tg{background:none;border:2px solid var(--bad);box-shadow:none;border-radius:6px;padding:0 6px;color:var(--bad);font-size:.95em;font-weight:900;margin-right:2px}
+.ln .tg .dv,.ln .tg .kd{color:inherit}
+.gl{color:var(--sub);font-weight:500}
+.ln .ex{border:0;padding:0;margin-left:5px;font-weight:500}
+.ln .ex::before{content:"("}.ln .ex::after{content:")"}
+.ln.note .dv,.ln.note .kd,.ln.cdr .dv,.ln.ctl .dv,.ln.cdr .kd,.ln.ctl .kd{color:inherit;font-weight:inherit}
 </style>
 </head>
 <body>
@@ -362,7 +381,7 @@ function render(){
   $('#tags').innerHTML=tg;
   const sc=scrOf(it);let lh='';
   if(sc){if(sc.tip)lh+='<div class="tipline">💡 '+esc(sc.tip)+'</div>';
-    sc.lines.forEach(l=>{const w=WHO[l.who]||WHO.act;lh+='<div class="ln '+esc(l.who)+'"><span class="w" style="background:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'})}
+    sc.lines.forEach(l=>{const w=WHO[l.who]||WHO.act;lh+='<div class="ln '+esc(l.who)+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'})}
   $('#lines').innerHTML=lh;
   let lk='';if(sc&&sc.src&&sc.src.length)lk+='<span class="tag lnk" data-raw="'+sc.src.join(',')+'">📄 5장 '+sc.src.join('·')+' 원문</span><span class="tag lnk" data-st="'+sc.src.join(',')+'">📋 학습표</span>';
   if(it.k6)lk+='<span class="tag lnk" data-oral="'+it.k6.join(',')+'">📖 구술 '+it.k6.join('·')+'</span>';
@@ -375,6 +394,7 @@ function render(){
   $('#gNote').textContent=(GRAD[si]&&GRAD[si].n||'')+(sec.q?' · ⚠ '+sec.q:'');
   const nx=F[p+1];$('#nextUp').innerHTML=nx?'터치 ▸ 다음: <b>'+esc(nx.t)+'</b>'+(nx.s!==it.s&&!nx.end?' <span style="color:var(--ok)">('+esc(SEC[nx.s].n)+')</span>':''):'마지막입니다';
   const c=$('#card');c.style.animation='none';void c.offsetWidth;c.style.animation='';fade();
+  {const sg=new Set();c.querySelectorAll('.dv').forEach(d=>{const g=d.querySelector('.gl');if(!g)return;const k=(d.firstChild&&d.firstChild.textContent||'').trim();if(sg.has(k))g.remove();else sg.add(k)})}
   ls.set('sbu5.pos',{st,p,hl:opt.hl,prep:opt.prep});
 }
 $('#route').addEventListener('click',e=>{const r=e.target.closest('[data-rs]');if(!r)return;const i=+r.dataset.rs;let k=i>=10?F.length-1:F.findIndex(x=>!x.prep&&!x.end&&x.s===i);if(k<0)k=F.findIndex(x=>!x.prep&&x.s>=i);if(k>=0){p=k;render()}});
@@ -510,7 +530,7 @@ function fcStart(list,name){const by=[0,1,2,3,null];FQ=[];by.forEach(b=>FQ.push(
 function fcScope(){if(stOnly)return[stOnly,'이 고장'];if(stM==='grp'&&stOpenG!=null){const g=GRP[stOpenG];return[Object.keys(g.m),g.n]}
  if(stM==='sc')return[SNO.filter(n=>WHERE[n]),'시나리오 고장'];if(stM==='fav')return[SNO.filter(n=>FAV[n]),'★ 즐겨찾기'];return[SNO.slice(),'5장 전체']}
 const fcL=()=>(QZ[FQ[0]]||[]).filter(l=>!(l.who==='note'&&l.t.startsWith('▶ 현상')));const quizable=l=>!l.ex&&l.who!=='note';
-function lnHTML(l,cls){const w=WHO[l.who]||WHO.act;return '<div class="ln '+l.who+(cls||'')+'"><span class="w" style="background:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'}
+function lnHTML(l,cls){const w=WHO[l.who]||WHO.act;return '<div class="ln '+l.who+(cls||'')+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'}
 function fcAuto(){const L=fcL();while(fcI<L.length&&!quizable(L[fcI]))fcI++}
 function fcShow(){fcI=0;fcMiss=0;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*100:100)+'%';
  if(!FQ.length){$('#fcB').innerHTML='<div class="fe"><div class="big">끝!</div><div class="row3"><span style="color:var(--ok)">앎 '+FC.a+'</span><span style="color:var(--warn)">애매 '+FC.h+'</span><span style="color:var(--bad)">모름 '+FC.k+'</span></div><p class="note">모름은 다음에 먼저 나옵니다. 3번 이상 틀린 건 ⚠ 표시.</p></div>';
@@ -522,7 +542,7 @@ function fcShow(){fcI=0;fcMiss=0;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*1
 function fcDraw(nw){const L=fcL();let h='';
  for(let i=0;i<fcI;i++)h+=lnHTML(L[i],i>=nw?' new':'');
  const done=fcI>=L.length,tot=L.filter(quizable).length,cur=L.slice(0,fcI).filter(quizable).length;
- if(!done){const n=L[fcI],w=WHO[n.who]||WHO.act;h+='<div class="ln hid '+n.who+'"><span class="w" style="background:'+w[1]+'">'+w[0]+'</span><span class="t">'+(n.who==='pt'&&n.tg?'<b class="tg">'+esc(n.tg)+'</b> ▸ ':'')+(fcMode==='rec'?'? 무엇일까요 — 탭':'?')+'</span></div>';
+ if(!done){const n=L[fcI],w=WHO[n.who]||WHO.act;h+='<div class="ln hid '+n.who+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+(n.who==='pt'&&n.tg?'<b class="tg">'+esc(n.tg)+'</b> ▸ ':'')+(fcMode==='rec'?'? 무엇일까요 — 탭':'?')+'</span></div>';
   if(fcMode==='pick'){const pool=[...new Set([...L.filter((x,k)=>k!==fcI&&quizable(x)&&x.t!==n.t&&x.who===n.who).map(x=>x.t),...Object.values(QZ).flat().filter(x=>quizable(x)&&x.who===n.who&&x.t!==n.t).map(x=>x.t)])];
    const ch=shuf([n.t,...shuf(pool).slice(0,2)]);h+='<div class="oq">'+ch.map(t=>'<button data-pk="'+esc(t)+'">'+G(t)+'</button>').join('')+'</div>'}}
  $('#fcX').innerHTML=h;
