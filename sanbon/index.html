@@ -164,6 +164,21 @@ body{word-break:keep-all;overflow-wrap:break-word}
 .ln .tg{font-size:.86em;padding:1px 7px;border:2px solid var(--warn);box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 .ln.tc .t,.ln.tk .t{border-left:3px solid currentColor;padding-left:7px}
 [data-theme="light"] .dv{background:rgba(0,90,200,.07)}
+
+/* v28 운행 이동 */
+#route .st{cursor:pointer}
+#fl{display:flex;align-items:flex-start;gap:6px;padding:4px 8px 5px;border-bottom:1px solid var(--line);background:var(--bg)}
+#fl .flc{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;flex:1;align-items:center;min-width:0;scroll-behavior:smooth}
+#fl .flc::-webkit-scrollbar{display:none}
+#fl.x .flc{flex-wrap:wrap;max-height:46vh;overflow-y:auto}
+.fc{flex:0 0 auto;font-size:.8em;padding:5px 9px;border-radius:14px;background:var(--chip);color:var(--tx);white-space:nowrap;cursor:pointer;border:1.5px solid var(--line)}
+.fc i{font-style:normal}.fc b{color:var(--bad)}.fc.hl{color:var(--hl)}.fc.hl b{color:var(--hl)}.fc.rt b,.fc.rt{color:var(--ok)}
+.fc.cur{border-color:var(--acc);background:var(--acc);color:#fff;font-weight:900}.fc.cur b{color:#fff}
+.fc .f{display:none}#fl.x .fc .s{display:none}#fl.x .fc .f{display:inline;white-space:normal}
+.fs2{flex:0 0 auto;font-size:.68em;color:var(--sub);font-weight:800;padding-left:2px}
+#fl.x .fs2{flex-basis:100%;margin-top:6px;color:var(--ok);font-size:.78em}
+.flt{flex:0 0 auto;font-size:.75em;font-weight:800;padding:5px 8px;border-radius:10px;border:1.5px solid var(--acc);background:transparent;color:var(--acc);white-space:nowrap}
+#cardWrap::before{content:"‹";position:absolute;left:2px;top:50%;transform:translateY(-50%);font-size:34px;color:var(--sub);opacity:.22;pointer-events:none;z-index:1}
 </style>
 </head>
 <body>
@@ -179,12 +194,13 @@ body{word-break:keep-all;overflow-wrap:break-word}
   <div class="hsec">설정</div>
   <div class="row"><button class="hb" id="oTh"></button><button class="hb" id="oFs"></button></div>
   <div class="row"><button class="hb" id="oPrep"></button><button class="hb" id="oHl"></button></div>
-  <details class="note"><summary>사용법</summary><b>강조 표시</b> · <span class="dv">MCB</span> 테두리 = 스위치·차단기·장치 이름 · <span class="kd">배전반</span> 밑줄 = 보고 만지는 기기 · <b class="nm">4단</b> = 단수·속도·시간 · 노란 칩 = 지적 대상<br><b>줄 끝 표시</b> · <b>예시</b> = 교재에 없는 상대(차장·관제) 응답 · <b>보충</b> = 교재에 없지만 실제로 하는 동작(배전반 열고 닫기 등) · <b>시험</b> = 시험장에서는 후부 운전실·M차 배전반·출입문 Cock를 전부 운전실 패널에서 내가 직접 취급.<br>「준비점검」은 교재 3장(3.1 기동 전 점검 ~ 3.10 출고 점검 완료) 원문 순서로 산본역 출발 전에 10장 나옵니다. 역간마다 아래 고정칸 한 장: 고장 위치(①②… 번호), 구배, 운전 요령 그림. 위쪽은 지금 고장의 비상조치 대본. 화면 아무 데나 터치 = 다음 고장(역간이 끝나면 다음 역간). ◀ = 이전.<br>대본은 교재 <b>5장(고장 시 조치)</b> 원문, 구술은 <b>6장</b> 원문입니다. 원문에 없는 차장·관제 응답은 「예시」로 표시.</details>
+  <details class="note"><summary>사용법</summary><b>강조 표시</b> · <span class="dv">MCB</span> 테두리 = 스위치·차단기·장치 이름 · <span class="kd">배전반</span> 밑줄 = 보고 만지는 기기 · <b class="nm">4단</b> = 단수·속도·시간 · 노란 칩 = 지적 대상<br><b>줄 끝 표시</b> · <b>예시</b> = 교재에 없는 상대(차장·관제) 응답 · <b>보충</b> = 교재에 없지만 실제로 하는 동작(배전반 열고 닫기 등) · <b>시험</b> = 시험장에서는 후부 운전실·M차 배전반·출입문 Cock를 전부 운전실 패널에서 내가 직접 취급.<br>「준비점검」은 교재 3장(3.1 기동 전 점검 ~ 3.10 출고 점검 완료) 원문 순서로 산본역 출발 전에 10장 나옵니다. 역간마다 아래 고정칸 한 장: 고장 위치(①②… 번호), 구배, 운전 요령 그림. 위쪽은 지금 고장의 비상조치 대본. 화면 오른쪽 터치 = 다음, 왼쪽 ⅓ 터치 = 이전 · 위 역 이름 터치 = 그 구간으로 · 그 아래 고장 목록 터치 = 그 고장으로(▾ 전체 = 펼쳐 보기)(역간이 끝나면 다음 역간). ◀ = 이전.<br>대본은 교재 <b>5장(고장 시 조치)</b> 원문, 구술은 <b>6장</b> 원문입니다. 원문에 없는 차장·관제 응답은 「예시」로 표시.</details>
 </section>
 
 <section class="scr" id="run">
   <div id="top"><button class="hb" id="bHome">⌂</button><button class="hb" id="bPrev">◀</button><span id="tName"></span><span id="tProg"></span><button class="hb" id="bTh" title="화면 색" style="flex:0 0 auto;min-width:46px;font-size:.85em">색</button><button class="hb" id="bList">목차</button></div>
   <div id="route"></div>
+  <div id="fl"></div>
   <div id="cardWrap"><div id="card">
     <div id="at"></div>
     <div id="ttl"></div>
@@ -248,8 +264,15 @@ document.documentElement.dataset.theme=opt.th;
 let st=0,F=[],p=0;
 function build(s){const pre=opt.prep===false?[]:PREP.map(p=>({s:0,at:'산본역 출고 · 준비점검 '+p.no,t:p.title,prep:1,scr:{lines:p.lines,tip:'교재 3장 준비 점검 ('+p.no+')',src:[]}}));return pre.concat(SC[s].items.filter(x=>opt.hl||!x.hl))}
 function scrOf(it){return it.scr||(SCR[st]||{})[SC[st].items.indexOf(it)]}
+const shortT=t=>t.length>10?t.slice(0,10)+'…':t;
+function flHTML(){let h='<button class="flt" id="flTog" aria-label="고장 목록 펼치기">'+(opt.flx?'▴ 접기':'▾ 전체')+'</button><div class="flc">';let ls=-1,n=0;
+ const pi=F.findIndex(x=>x.prep);if(pi>=0)h+='<span class="fc'+(F[p].prep?' cur':'')+'" data-j="'+pi+'">준비점검</span>';
+ F.forEach((x,i)=>{if(x.prep)return;if(!x.end&&x.s!==ls){ls=x.s;h+='<span class="fs2">'+esc(STN[x.s].replace('정부과천','정부'))+'→'+esc(STN[x.s+1].replace('정부과천','정부'))+'</span>'}
+  if(!x.rt&&!x.end)n++;const lb=x.end?'🏁':x.rt?'A':n;h+='<span class="fc'+(i===p?' cur':'')+(x.hl?' hl':'')+(x.rt?' rt':'')+'" data-j="'+i+'"><b>'+lb+'</b> <i class="s">'+esc(shortT(x.t))+'</i><i class="f">'+esc(x.t)+'</i></span>'});
+ return h+'</div>'}
+function flRender(){const el=$('#fl');el.classList.toggle('x',!!opt.flx);el.innerHTML=flHTML();const c=el.querySelector('.fc.cur');if(c){if(opt.flx)c.scrollIntoView({block:'nearest'});else{const w=el.querySelector('.flc');w.scrollLeft=c.offsetLeft-w.offsetLeft-w.clientWidth/2+c.offsetWidth/2}}}
 function routeHTML(si){const fs=new Set(F.filter(x=>!x.end&&!x.prep).map(x=>x.s));let h='';
- STN.forEach((n,i)=>{h+='<div class="st'+(i===si||i===si+1?' on':'')+'">'+(i<10?'<span class="seg'+(i===si?' on':'')+(fs.has(i)?' f':'')+'"></span>':'')+esc(NARROW()?['산본','금정','범계','평촌','인덕','정부','과천','대공','경마','선바','남태'][i]:n.replace('정부과천','정부'))+'</div>'});return h}
+ STN.forEach((n,i)=>{h+='<div class="st'+(i===si||i===si+1?' on':'')+'" data-rs="'+i+'">'+(i<10?'<span class="seg'+(i===si?' on':'')+(fs.has(i)?' f':'')+'"></span>':'')+esc(NARROW()?['산본','금정','범계','평촌','인덕','정부','과천','대공','경마','선바','남태'][i]:n.replace('정부과천','정부'))+'</div>'});return h}
 function gradHTML(si){const g=GRAD[si];if(!g)return'';return g.p.map(([l,v])=>'<div class="gb '+(v>0?'u':v<0?'d':'z')+'" style="flex:'+(1+Math.abs(v)/20)+'"><div class="v">'+(v>0?'▲':v<0?'▼':'')+Math.abs(v)+'</div><div class="l">'+esc(l||' ')+'</div></div>').join('')}
 // 운전 요령 흐름 (상선 요령표 → 그림) a: pow 역행 / off 동력OFF / brk 제동 / rel 완해 / nt 메모
 const FLOW=[
@@ -320,7 +343,7 @@ function render(){
   const it=F[p],si=Math.min(it.s,9),sec=SEC[si];
   const list=F.filter(x=>!x.end&&!x.prep&&x.s===si),k=list.indexOf(it),secs=[...new Set(F.filter(x=>!x.end&&!x.prep).map(x=>x.s))];
   $('#tName').textContent=SC[st].name;$('#tProg').textContent=(p+1)+'/'+F.length;
-  $('#route').innerHTML=routeHTML(it.end?9:si);
+  $('#route').innerHTML=routeHTML(it.end?9:si);flRender();
   const fl=list.filter(x=>!x.rt),fk=fl.indexOf(it);$('#at').textContent=it.end?'남태령 도착 · 사업 종료':(it.rt?'정상 취급 · ':fk>=0?'고장 '+(fk+1)+'/'+fl.length+' · ':'')+it.at;
   $('#ttl').textContent=it.t;$('#ttl').className=it.hl?'hl':'';
   let tg='';if(it.rt)tg+='<span class="tag" style="color:var(--ok);border-color:var(--ok)">정상 취급 · 필수</span>';if(it.m)tg+='<span class="tag man">수동조작</span>';if(it.hl)tg+='<span class="tag hl">형광 · 후반 적용</span>';
@@ -344,8 +367,10 @@ function render(){
   const c=$('#card');c.style.animation='none';void c.offsetWidth;c.style.animation='';fade();
   ls.set('sbu5.pos',{st,p,hl:opt.hl,prep:opt.prep});
 }
+$('#route').addEventListener('click',e=>{const r=e.target.closest('[data-rs]');if(!r)return;const i=+r.dataset.rs;let k=i>=10?F.length-1:F.findIndex(x=>!x.prep&&!x.end&&x.s===i);if(k<0)k=F.findIndex(x=>!x.prep&&x.s>=i);if(k>=0){p=k;render()}});
+$('#fl').addEventListener('click',e=>{if(e.target.closest('#flTog')){opt.flx=!opt.flx;ls.set('sbu5.opt',opt);flRender();return}const j=e.target.closest('[data-j]');if(j){p=+j.dataset.j;if(opt.flx){opt.flx=false;ls.set('sbu5.opt',opt)}render()}});
 function go(d){const np=Math.max(0,Math.min(F.length-1,p+d));if(np===p)return;p=np;render();try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
-$('#card').addEventListener('click',e=>{const s_=e.target.closest('[data-st]');if(s_){openSt(s_.dataset.st.split(','));return}const r=e.target.closest('[data-raw]');if(r){openRaw(r.dataset.raw.split(','));return}const t=e.target.closest('[data-oral]');if(t){openOral(t.dataset.oral.split(','));return}go(1)});
+$('#card').addEventListener('click',e=>{const s_=e.target.closest('[data-st]');if(s_){openSt(s_.dataset.st.split(','));return}const r=e.target.closest('[data-raw]');if(r){openRaw(r.dataset.raw.split(','));return}const t=e.target.closest('[data-oral]');if(t){openOral(t.dataset.oral.split(','));return}go(e.clientX<innerWidth*0.33?-1:1)});
 $('#guide').onclick=e=>{if(e.target.closest('#gTog')){opt.min=!opt.min;ls.set('sbu5.opt',opt);applyMin();return}const j=e.target.closest('[data-j]');if(j){p=+j.dataset.j;render();return}if(e.target.closest('#flow,#legend'))return;go(1)};
 function applyMin(){$('#guide').classList.toggle('min',!!opt.min);$('#gTog').textContent=opt.min?'▴':'▾';fade()}
 function fade(){const c=$('#card');$('#cardWrap').style.setProperty('--fade',c.scrollHeight-c.scrollTop-c.clientHeight>8?1:0)}
