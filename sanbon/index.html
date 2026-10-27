@@ -207,6 +207,33 @@ body{word-break:keep-all;overflow-wrap:break-word}
 .ln .ex{border:0;padding:0;margin-left:5px;font-weight:500}
 .ln .ex::before{content:"("}.ln .ex::after{content:")"}
 .ln.note .dv,.ln.note .kd,.ln.cdr .dv,.ln.ctl .dv,.ln.cdr .kd,.ln.ctl .kd{color:inherit;font-weight:inherit}
+
+/* v34 단계 묶음 */
+.bph{font-size:.82em;color:var(--sub);background:var(--chip);border-radius:8px;padding:6px 9px;margin:6px 0 10px}
+.bk{display:flex;gap:10px;margin:0 0 10px}
+.bn{flex:0 0 24px;height:24px;border-radius:50%;background:var(--chip);color:var(--sub);font-size:.78em;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:8px}
+.bb{flex:1;min-width:0;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);border-radius:12px;padding:8px 12px}
+.bk.call .bb{border-left:4px solid var(--cdr)}.bk.call.tk .bb{border-left-color:var(--ctl)}
+.bh{font-size:.72em;font-weight:900;color:var(--cdr);margin-bottom:3px}.bk.tk .bh{color:var(--ctl)}
+.bl{font-size:1.05em;line-height:1.45;padding:3px 0;word-break:keep-all}
+.bl.me,.bl.pt,.bl.tc,.bl.tk{font-weight:700}
+.bl.cdr,.bl.ctl{color:var(--sub);font-size:.92em;padding-left:12px}
+.bl .rw{font-size:.75em;font-weight:800;margin-right:4px}
+.bl.note{color:var(--sub);font-size:.8em}.bl.note .dv,.bl.note .kd,.bl.cdr .dv,.bl.ctl .dv,.bl.cdr .kd,.bl.ctl .kd{color:inherit;font-weight:inherit}
+.pi{color:var(--bad);font-weight:900}
+.bl .q .dv,.bl .q .kd,.bl.me .dv,.bl.me .kd,.bl.tc .dv,.bl.tc .kd,.bl.tk .dv,.bl.tk .kd,.bph .dv,.bph .kd{color:inherit}.bl .q .gl,.bl.tc .gl,.bl.tk .gl{display:none}
+.bl .tg{display:inline-block;background:none;border:2px solid var(--bad);border-radius:6px;padding:0 6px;color:var(--bad);font-weight:900;font-size:.95em}
+.bl .tg .dv,.bl .tg .kd{color:inherit}.bl.pt .dv .gl{display:none}
+.bl .ex{font-size:.7em;color:var(--sub);margin-left:5px;font-weight:500}.bl .ex::before{content:"("}.bl .ex::after{content:")"}
+
+/* B: 타임라인 (상자 없이 세로선 + 번호) */
+.lb .bk{position:relative;margin:0;padding-bottom:12px}
+.lb .bk:not(:last-child)::before{content:"";position:absolute;left:11px;top:34px;bottom:0;width:2px;background:var(--line)}
+.lb .bb{background:none;border:0!important;border-radius:0;padding:6px 0 0}
+.lb .bn{background:var(--tx);color:var(--bg);margin-top:6px}
+.lb .bk.call .bn{background:var(--cdr)}.lb .bk.call.tk .bn{background:var(--ctl)}
+.lb .bk.call .bl.tc,.lb .bk.call .bl.tk{background:var(--chip);border-radius:12px 12px 12px 4px;padding:7px 11px;display:inline-block}
+.lb .bk.call .bl.cdr,.lb .bk.call .bl.ctl{padding:5px 0 0 12px}
 </style>
 </head>
 <body>
@@ -234,7 +261,7 @@ body{word-break:keep-all;overflow-wrap:break-word}
     <div id="at"></div>
     <div id="ttl"></div>
     <div class="tags" id="tags"></div>
-    <div id="lines"></div>
+    <div id="lines" class="lb"></div>
     <div class="tags" id="links" style="margin-top:12px"></div>
     <div id="nextUp"></div>
   </div></div>
@@ -285,6 +312,28 @@ const GRAD=[
 ];
 const WHO={note:['참고','var(--sub)'],act:['동작','var(--act)'],me:['환호','var(--me)'],pt:['☞지적','var(--me)'],tc:['→차장','var(--cdr)'],tk:['→관제','var(--ctl)'],cdr:['차장','var(--cdr)'],ctl:['관제','var(--ctl)']};
 const $=s=>document.querySelector(s);
+function mk(l){return (l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')}
+function oldLines(L){return L.map(l=>{const w=WHO[l.who]||WHO.act;return '<div class="ln '+esc(l.who)+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+mk(l)+'</span></div>'}).join('')}
+// 단계 묶음: 동작·지적·환호 줄은 한 단계, 차장/관제 통화는 답변과 함께 한 단계
+function blkHTML(L){const gs=[];let cur=null,ph=[];
+ L.forEach(l=>{const w=l.who;
+  if(w==='note'&&/^▶\s*현상/.test(l.t)&&!gs.length){ph.push(l);return}
+  if(w==='tc'||w==='tk'){cur={k:w,ls:[l]};gs.push(cur);return}
+  if((w==='cdr'||w==='ctl')&&cur&&(cur.k==='tc'||cur.k==='tk')){cur.ls.push(l);return}
+  if(w==='note'){if(cur)cur.ls.push(l);else{cur={k:'a',ls:[l]};gs.push(cur)}return}
+  if(!cur||cur.k!=='a'||cur.done){cur={k:'a',ls:[]};gs.push(cur)}cur.ls.push(l)});
+ let h=ph.map(l=>'<div class="bph">'+G(l.t.replace(/^▶\s*/,''))+'</div>').join('');
+ gs.forEach((g,i)=>{const call=g.k!=='a',who=g.k==='tc'?'차장':'관제';
+  h+='<div class="bk '+(call?'call '+g.k:'act')+'"><div class="bn">'+(i+1)+'</div><div class="bb">'+(call?'<div class="bh">📞 '+who+'에게</div>':'');
+  g.ls.forEach(l=>{const w=l.who;let c='bl '+w,t;
+   if(w==='pt')t='<span class="pi">☞</span> '+(l.tg?'<b class="tg">'+esc(l.tg)+'</b> ▸ ':'')+'<span class="q">“'+G(l.t)+'”</span>';
+   else if(w==='me')t='“'+G(l.t.replace(/^[“"]|[”"]$/g,''))+'”';
+   else if(w==='tc'||w==='tk')t=G(l.t);
+   else if(w==='cdr'||w==='ctl')t='<span class="rw">'+(w==='cdr'?'차장':'관제')+'</span> '+G(l.t);
+   else t=G(l.t);
+   h+='<div class="'+c+'">'+t+mk(l)+'</div>'});
+  h+='</div></div>'});
+ return h}
 function lt(l){return l.who==='pt'?(l.tg?'<b class="tg">'+esc(l.tg)+'</b> ▸ ':'')+'“'+G(l.t)+'”':G(l.t)}const NARROW=()=>innerWidth<600;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
@@ -381,7 +430,7 @@ function render(){
   $('#tags').innerHTML=tg;
   const sc=scrOf(it);let lh='';
   if(sc){if(sc.tip)lh+='<div class="tipline">💡 '+esc(sc.tip)+'</div>';
-    sc.lines.forEach(l=>{const w=WHO[l.who]||WHO.act;lh+='<div class="ln '+esc(l.who)+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+lt(l)+(l.ex?'<span class="ex">예시</span>':'')+(l.ad?'<span class="ex ad'+(l.ad===true?'':' sh')+'">'+(l.ad===true?'보충':esc(l.ad))+'</span>':'')+'</span></div>'})}
+    lh+=opt.lay==='old'?oldLines(sc.lines):blkHTML(sc.lines)}
   $('#lines').innerHTML=lh;
   let lk='';if(sc&&sc.src&&sc.src.length)lk+='<span class="tag lnk" data-raw="'+sc.src.join(',')+'">📄 5장 '+sc.src.join('·')+' 원문</span><span class="tag lnk" data-st="'+sc.src.join(',')+'">📋 학습표</span>';
   if(it.k6)lk+='<span class="tag lnk" data-oral="'+it.k6.join(',')+'">📖 구술 '+it.k6.join('·')+'</span>';
