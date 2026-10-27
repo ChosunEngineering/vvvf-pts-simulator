@@ -234,6 +234,21 @@ body{word-break:keep-all;overflow-wrap:break-word}
 .lb .bk.call .bn{background:var(--cdr)}.lb .bk.call.tk .bn{background:var(--ctl)}
 .lb .bk.call .bl.tc,.lb .bk.call .bl.tk{background:var(--chip);border-radius:12px 12px 12px 4px;padding:7px 11px;display:inline-block}
 .lb .bk.call .bl.cdr,.lb .bk.call .bl.ctl{padding:5px 0 0 12px}
+
+/* v35 학습표·문제 타임라인 */
+.lb .bl.hid{color:var(--sub);font-style:italic;border-bottom:2px dashed var(--acc);padding-bottom:4px}
+.lb .bl.new{animation:fi2 .25s}
+.vs{list-style:none;counter-reset:vs;padding-left:0;margin:6px 0 0}
+.vs>li{counter-increment:vs;position:relative;padding:0 0 12px 34px;margin:0;font-weight:500;line-height:1.5}
+.vs>li::before{content:counter(vs);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:var(--tx);color:var(--bg);font-size:.78em;font-weight:900;display:flex;align-items:center;justify-content:center}
+.vs>li:not(:last-child)::after{content:"";position:absolute;left:11px;top:28px;bottom:0;width:2px;background:var(--line)}
+.vs>li>div{font-weight:700}
+.vs ul{margin:3px 0 0;padding-left:0;font-weight:400;list-style:none}
+.vs ul li{margin:3px 0;list-style:none}
+.vs li.d,.vs li.c,.vs div.d,.vs div.c{color:var(--tx);font-weight:700;background:var(--chip);border-radius:12px 12px 12px 4px;padding:6px 10px;border-left:3px solid var(--cdr)}
+.vs li.c,.vs div.c{border-left-color:var(--ctl)}
+.vs .d .dv,.vs .d .kd,.vs .c .dv,.vs .c .kd{color:inherit}.vs .d .gl,.vs .c .gl{display:none}
+.sx .k,.sx1 .k{color:var(--sub);font-weight:500;font-size:.88em}
 </style>
 </head>
 <body>
@@ -325,7 +340,8 @@ function blkHTML(L){const gs=[];let cur=null,ph=[];
  let h=ph.map(l=>'<div class="bph">'+G(l.t.replace(/^▶\s*/,''))+'</div>').join('');
  gs.forEach((g,i)=>{const call=g.k!=='a',who=g.k==='tc'?'차장':'관제';
   h+='<div class="bk '+(call?'call '+g.k:'act')+'"><div class="bn">'+(i+1)+'</div><div class="bb">'+(call?'<div class="bh">📞 '+who+'에게</div>':'');
-  g.ls.forEach(l=>{const w=l.who;let c='bl '+w,t;
+  g.ls.forEach(l=>{const w=l.who;let c='bl '+w+(l._new?' new':''),t;
+   if(l._hid){h+='<div class="'+c+' hid">'+(w==='pt'?'<span class="pi">☞</span> '+(l.tg?'<b class="tg">'+esc(l.tg)+'</b> ▸ ':''):'')+(fcMode==='rec'?'? 무엇일까요 — 탭':'?')+'</div>';return}
    if(w==='pt')t='<span class="pi">☞</span> '+(l.tg?'<b class="tg">'+esc(l.tg)+'</b> ▸ ':'')+'<span class="q">“'+G(l.t)+'”</span>';
    else if(w==='me')t='“'+G(l.t.replace(/^[“"]|[”"]$/g,''))+'”';
    else if(w==='tc'||w==='tk')t=G(l.t);
@@ -544,7 +560,8 @@ function stWhere(){const w={};SC.forEach((_,s)=>SC[s].items.forEach(it=>{const s
 const WHERE=stWhere();
 const SNO=Object.keys(C5).sort((a,b)=>+a.split('.')[1]-+b.split('.')[1]);
 function who(s){return /차장님/.test(s)?'d':/관제실|관제사/.test(s)?'c':''}
-function stepsHTML(d){return '<ol class="vs">'+(d.steps||[]).map(s=>'<li>'+(s.t?'<div>'+G(s.t)+'</div>':'')+(s.sub.length?'<ul>'+s.sub.map(x=>'<li class="'+who(x)+'">'+G(x)+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>'+((d.notes||[]).length?'<div class="k" style="margin-top:6px">'+d.notes.map(n=>'※ '+G(n)).join('<br>')+'</div>':'')}
+const PT=s=>s.replace(/^☞\s*/,'<span class="pi">☞</span> ');
+function stepsHTML(d){return '<ol class="vs">'+(d.steps||[]).map(s=>'<li>'+(s.t?'<div class="'+who(s.t)+'">'+PT(G(s.t))+'</div>':'')+(s.sub.length?'<ul>'+s.sub.map(x=>'<li class="'+who(x)+'">'+PT(G(x))+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>'+((d.notes||[]).length?'<div class="k" style="margin-top:6px">'+d.notes.map(n=>'※ '+G(n)).join('<br>')+'</div>':'')}
 function stCard(no,lab,f){const c=C5[no],d=ST[no]||{};if(f&&!(no+' '+c.title+' '+(lab||'')+' '+JSON.stringify(d)).toLowerCase().includes(f))return'';
  const wh=(WHERE[no]||[]).map(x=>'<span class="'+(x.hl?'a':'')+'">'+['1-1','1-2','1-3'][x.s]+' · '+esc(STN[x.sec].replace('정부과천','정부'))+'→'+esc(STN[x.sec+1].replace('정부과천','정부'))+'</span>').join('');
  let h='<div class="de cl'+(stQ?'':' open')+(stOnly?' x':'')+(DONE[no]?' dn':'')+'" data-no="'+no+'"><h3 data-tg>'+star(no)+(bx(no)!=null?'<span class="bx bx'+bx(no)+'">'+BXL[bx(no)]+'</span>':'')+((BOX[no]||{}).miss>=3?'<span class="bx bx0">⚠ 자주 틀림</span>':'')+(lab?'<span class="lb">'+esc(lab)+'</span>':'')+'<span class="tt">'+esc(no)+' '+esc(c.title)+'</span></h3>'+(wh?'<div class="wh">'+wh+'</div>':'')+'<div class="bd">';
@@ -589,15 +606,15 @@ function fcShow(){fcI=0;fcMiss=0;$('#fcBar').style.width=(FN?(FN-FQ.length)/FN*1
   '<h3>'+esc(c.title)+'</h3>'+(d.sym?'<div class="cue"><b>현상</b>'+esc(d.sym)+'</div>':'')+'<div class="ask">'+(fcMode==='rec'?'다음 줄을 소리 내어 말하고 → 탭해서 확인':'다음에 올 줄을 고르세요')+'</div><div id="fcX"></div></div>';
  fcAuto();fcDraw()}
 function fcDraw(nw){const L=fcL();let h='';
- for(let i=0;i<fcI;i++)h+=lnHTML(L[i],i>=nw?' new':'');
  const done=fcI>=L.length,tot=L.filter(quizable).length,cur=L.slice(0,fcI).filter(quizable).length;
- if(!done){const n=L[fcI],w=WHO[n.who]||WHO.act;h+='<div class="ln hid '+n.who+'"><span class="w" style="color:'+w[1]+'">'+w[0]+'</span><span class="t">'+(n.who==='pt'&&n.tg?'<b class="tg">'+esc(n.tg)+'</b> ▸ ':'')+(fcMode==='rec'?'? 무엇일까요 — 탭':'?')+'</span></div>';
+ {const arr=L.slice(0,fcI).map((l,i)=>i>=nw?Object.assign({},l,{_new:1}):l);if(!done)arr.push(Object.assign({},L[fcI],{_hid:1}));h+='<div class="lb">'+blkHTML(arr)+'</div>'}
+ if(!done){const n=L[fcI];
   if(fcMode==='pick'){const pool=[...new Set([...L.filter((x,k)=>k!==fcI&&quizable(x)&&x.t!==n.t&&x.who===n.who).map(x=>x.t),...Object.values(QZ).flat().filter(x=>quizable(x)&&x.who===n.who&&x.t!==n.t).map(x=>x.t)])];
    const ch=shuf([n.t,...shuf(pool).slice(0,2)]);h+='<div class="oq">'+ch.map(t=>'<button data-pk="'+esc(t)+'">'+G(t)+'</button>').join('')+'</div>'}}
  $('#fcX').innerHTML=h;
  $('#fcA').innerHTML=done?'<button class="b0" data-r="0">모름<br><small>곧 다시</small></button><button class="b1" data-r="1">애매<br><small>뒤로</small></button><button class="b2" data-r="2">앎<br><small>통과</small></button>'
   :'<button class="bG" data-fx="mode" style="flex:.8">'+(fcMode==='rec'?'고르기로':'떠올리기로')+'</button><button class="bG" data-fx="all" style="flex:.7">전부 보기</button>'+(fcMode==='rec'?'<button class="bA" data-fx="next" style="flex:1.4">다음 줄 ▶ <small>'+cur+'/'+tot+'</small></button>':'');
- const x=$('#fcX .hid')||$('#fcX .ln:last-child');if(x)x.scrollIntoView({block:'center'})}
+ const x=$('#fcX .hid')||[...document.querySelectorAll('#fcX .bl')].pop();if(x)x.scrollIntoView({block:'center'})}
 function fcNext(){const L=fcL();if(fcI>=L.length)return;const nw=fcI;fcI++;fcAuto();fcDraw(nw)}
 function fcRate(r){const no=FQ.shift(),o=BOX[no]||{b:0,miss:0};
  if(r===0){o.b=0;o.miss=(o.miss||0)+1;FC.k++;FQ.splice(Math.min(3,FQ.length),0,no)}
