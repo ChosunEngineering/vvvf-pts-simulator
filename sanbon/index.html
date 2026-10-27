@@ -179,6 +179,12 @@ body{word-break:keep-all;overflow-wrap:break-word}
 #fl.x .fs2{flex-basis:100%;margin-top:6px;color:var(--ok);font-size:.78em}
 .flt{flex:0 0 auto;font-size:.75em;font-weight:800;padding:5px 8px;border-radius:10px;border:1.5px solid var(--acc);background:transparent;color:var(--acc);white-space:nowrap}
 #cardWrap::before{content:"‹";position:absolute;left:2px;top:50%;transform:translateY(-50%);font-size:34px;color:var(--sub);opacity:.22;pointer-events:none;z-index:1}
+
+/* v29 음성 넘기기 */
+#bMic.on{background:var(--bad);color:#fff;border-color:var(--bad);animation:mp 1.4s infinite}
+@keyframes mp{50%{opacity:.6}}
+#micBar{display:none;font-size:.78em;font-weight:800;text-align:center;padding:3px 8px;background:var(--chip);color:var(--sub)}
+#micBar.on{display:block}#micBar.ok{background:var(--ok);color:#000}
 </style>
 </head>
 <body>
@@ -194,11 +200,12 @@ body{word-break:keep-all;overflow-wrap:break-word}
   <div class="hsec">설정</div>
   <div class="row"><button class="hb" id="oTh"></button><button class="hb" id="oFs"></button></div>
   <div class="row"><button class="hb" id="oPrep"></button><button class="hb" id="oHl"></button></div>
-  <details class="note"><summary>사용법</summary><b>강조 표시</b> · <span class="dv">MCB</span> 테두리 = 스위치·차단기·장치 이름 · <span class="kd">배전반</span> 밑줄 = 보고 만지는 기기 · <b class="nm">4단</b> = 단수·속도·시간 · 노란 칩 = 지적 대상<br><b>줄 끝 표시</b> · <b>예시</b> = 교재에 없는 상대(차장·관제) 응답 · <b>보충</b> = 교재에 없지만 실제로 하는 동작(배전반 열고 닫기 등) · <b>시험</b> = 시험장에서는 후부 운전실·M차 배전반·출입문 Cock를 전부 운전실 패널에서 내가 직접 취급.<br>「준비점검」은 교재 3장(3.1 기동 전 점검 ~ 3.10 출고 점검 완료) 원문 순서로 산본역 출발 전에 10장 나옵니다. 역간마다 아래 고정칸 한 장: 고장 위치(①②… 번호), 구배, 운전 요령 그림. 위쪽은 지금 고장의 비상조치 대본. 화면 오른쪽 터치 = 다음, 왼쪽 ⅓ 터치 = 이전 · 위 역 이름 터치 = 그 구간으로 · 그 아래 고장 목록 터치 = 그 고장으로(▾ 전체 = 펼쳐 보기)(역간이 끝나면 다음 역간). ◀ = 이전.<br>대본은 교재 <b>5장(고장 시 조치)</b> 원문, 구술은 <b>6장</b> 원문입니다. 원문에 없는 차장·관제 응답은 「예시」로 표시.</details>
+  <details class="note"><summary>사용법</summary><b>강조 표시</b> · <span class="dv">MCB</span> 테두리 = 스위치·차단기·장치 이름 · <span class="kd">배전반</span> 밑줄 = 보고 만지는 기기 · <b class="nm">4단</b> = 단수·속도·시간 · 노란 칩 = 지적 대상<br><b>줄 끝 표시</b> · <b>예시</b> = 교재에 없는 상대(차장·관제) 응답 · <b>보충</b> = 교재에 없지만 실제로 하는 동작(배전반 열고 닫기 등) · <b>시험</b> = 시험장에서는 후부 운전실·M차 배전반·출입문 Cock를 전부 운전실 패널에서 내가 직접 취급.<br>「준비점검」은 교재 3장(3.1 기동 전 점검 ~ 3.10 출고 점검 완료) 원문 순서로 산본역 출발 전에 10장 나옵니다. 역간마다 아래 고정칸 한 장: 고장 위치(①②… 번호), 구배, 운전 요령 그림. 위쪽은 지금 고장의 비상조치 대본. 🎤 버튼을 켜고 "다음"·"이전"·"처음"이라고 말해도 넘어갑니다(안드로이드 크롬·아이폰 사파리, 앱 주소로 열 때). 화면 오른쪽 터치 = 다음, 왼쪽 ⅓ 터치 = 이전 · 위 역 이름 터치 = 그 구간으로 · 그 아래 고장 목록 터치 = 그 고장으로(▾ 전체 = 펼쳐 보기)(역간이 끝나면 다음 역간). ◀ = 이전.<br>대본은 교재 <b>5장(고장 시 조치)</b> 원문, 구술은 <b>6장</b> 원문입니다. 원문에 없는 차장·관제 응답은 「예시」로 표시.</details>
 </section>
 
 <section class="scr" id="run">
-  <div id="top"><button class="hb" id="bHome">⌂</button><button class="hb" id="bPrev">◀</button><span id="tName"></span><span id="tProg"></span><button class="hb" id="bTh" title="화면 색" style="flex:0 0 auto;min-width:46px;font-size:.85em">색</button><button class="hb" id="bList">목차</button></div>
+  <div id="top"><button class="hb" id="bHome">⌂</button><button class="hb" id="bPrev">◀</button><span id="tName"></span><span id="tProg"></span><button class="hb" id="bTh" title="화면 색" style="flex:0 0 auto;min-width:46px;font-size:.85em">색</button><button class="hb" id="bMic" title="음성으로 넘기기" style="flex:0 0 auto;min-width:46px">🎤</button><button class="hb" id="bList">목차</button></div>
+  <div id="micBar"></div>
   <div id="route"></div>
   <div id="fl"></div>
   <div id="cardWrap"><div id="card">
@@ -369,6 +376,21 @@ function render(){
 }
 $('#route').addEventListener('click',e=>{const r=e.target.closest('[data-rs]');if(!r)return;const i=+r.dataset.rs;let k=i>=10?F.length-1:F.findIndex(x=>!x.prep&&!x.end&&x.s===i);if(k<0)k=F.findIndex(x=>!x.prep&&x.s>=i);if(k>=0){p=k;render()}});
 $('#fl').addEventListener('click',e=>{if(e.target.closest('#flTog')){opt.flx=!opt.flx;ls.set('sbu5.opt',opt);flRender();return}const j=e.target.closest('[data-j]');if(j){p=+j.dataset.j;if(opt.flx){opt.flx=false;ls.set('sbu5.opt',opt)}render()}});
+// 음성 넘기기: "다음" / "이전·뒤로" / "처음"
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,micOn=false,micT=0;
+function micMsg(t,ok){const b=$('#micBar');b.textContent=t;b.className=micOn?(ok?'on ok':'on'):'';clearTimeout(micT);if(ok)micT=setTimeout(()=>{if(micOn)b.className='on'},900)}
+function micStart(){if(!SR){alert('이 브라우저는 음성인식을 지원하지 않습니다. 안드로이드 크롬 또는 아이폰 사파리에서 앱 주소(github.io)로 열어 주세요.');return}
+ rec=new SR();rec.lang='ko-KR';rec.continuous=true;rec.interimResults=true;let lastCmd=0;
+ rec.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript.replace(/\s/g,'');const now=Date.now();if(now-lastCmd<1200)continue;
+   if(/다음|넥스트|next/i.test(t)){lastCmd=now;go(1);micMsg('🎤 "다음" → '+(p+1)+'/'+F.length,1)}
+   else if(/이전|뒤로|전단계|백/.test(t)){lastCmd=now;go(-1);micMsg('🎤 "이전" → '+(p+1)+'/'+F.length,1)}
+   else if(/처음/.test(t)&&e.results[i].isFinal){lastCmd=now;p=0;render();micMsg('🎤 "처음"',1)}}};
+ rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){micOn=false;$('#bMic').classList.remove('on');micMsg('');alert('마이크 권한이 꺼져 있습니다. 브라우저 설정에서 마이크를 허용해 주세요.')}};
+ rec.onend=()=>{if(micOn)try{rec.start()}catch(_){}};
+ try{rec.start();micOn=true;$('#bMic').classList.add('on');micMsg('🎤 듣는 중 — "다음" · "이전" · "처음"')}catch(_){}}
+function micStop(){micOn=false;try{rec&&rec.stop()}catch(_){};$('#bMic').classList.remove('on');micMsg('')}
+$('#bMic').onclick=e=>{e.stopPropagation();micOn?micStop():micStart()};
+$('#bHome').addEventListener('click',()=>{if(micOn)micStop()});
 function go(d){const np=Math.max(0,Math.min(F.length-1,p+d));if(np===p)return;p=np;render();try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
 $('#card').addEventListener('click',e=>{const s_=e.target.closest('[data-st]');if(s_){openSt(s_.dataset.st.split(','));return}const r=e.target.closest('[data-raw]');if(r){openRaw(r.dataset.raw.split(','));return}const t=e.target.closest('[data-oral]');if(t){openOral(t.dataset.oral.split(','));return}go(e.clientX<innerWidth*0.33?-1:1)});
 $('#guide').onclick=e=>{if(e.target.closest('#gTog')){opt.min=!opt.min;ls.set('sbu5.opt',opt);applyMin();return}const j=e.target.closest('[data-j]');if(j){p=+j.dataset.j;render();return}if(e.target.closest('#flow,#legend'))return;go(1)};
