@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>PTS 운전실 재구성 v11</title>
+<title>PTS 운전실 재구성 v12</title>
 <!-- PTS 운전실 재구성 · 제작 이한주 · © 2026 이한주. All rights reserved. 무단 복제·배포·수정·역설계를 금합니다.
      교재 내용 출처: 국토교통부 「철도차량 운전면허 표준교재」(제2종 전기차량, 기능교재 2023.09.06. 개정) — 교재 내용의 저작권은 원저작권자에게 있습니다. -->
 <meta name="author" content="이한주">
@@ -2280,6 +2280,16 @@ body.drv-imm.m-phone .mph-ov{display:block;position:absolute;inset:0;z-index:5;p
 .mph-toast{display:none;position:absolute;top:calc(max(4px,var(--sat)) + 46px);left:50%;transform:translateX(-50%);max-width:60%;padding:5px 12px;border-radius:10px;background:rgba(40,28,10,.84);color:#fde68a;font-size:12px;line-height:1.3;pointer-events:none}
 .mph-toast.on{display:block}
 </style>
+<style>
+/* v12 시나리오 탭 */
+#scnPanel{position:fixed;inset:0;z-index:9000;display:none;flex-direction:column;background:#0b1016}
+#scnPanel.on{display:flex}
+#scnPanel .scn-hd{display:flex;align-items:center;gap:8px;padding:6px 10px;padding-top:max(6px,env(safe-area-inset-top));background:#11161d;border-bottom:1px solid #253043;color:#d3ddee;font:600 14px system-ui,sans-serif}
+#scnPanel .scn-hd b{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#scnPanel .scn-hd button{min-height:40px;padding:0 14px;border-radius:9px;border:1px solid #3c5068;background:#1b2430;color:#fff;font-size:14px;touch-action:manipulation}
+#scnPanel .scn-hd button.go{background:#0b62a8;border-color:#4fb3ff}
+#scnPanel iframe{flex:1;width:100%;border:0;background:#fff}
+</style>
 </head>
 <body>
 <div class="app">
@@ -2294,6 +2304,7 @@ body.drv-imm.m-phone .mph-ov{display:block;position:absolute;inset:0;z-index:5;p
   <div class="hgroup hgroup-primary"><span class="hgroup-label">빠른 실행</span><div class="hgroup-actions">
     <button class="hbtn skip" id="btnSkipPrep" title="기동점검(준비점검) 1~10단계 즉시 완료 및 출고 대기 세팅 (단축키 K)">⚡ 기동점검 스킵</button>
     <button class="hbtn route tg" id="btnRoute" title="4호선 노선 운행 시뮬레이터 (불암산↔산본 전 구간 35개 역간)">🛤 노선 운행</button>
+    <button class="hbtn" id="btnScn" data-scn="1" title="산본상선 기동 시나리오 (대본 · 고장 조치 · 학습표)">📋 시나리오</button>
     <button class="hbtn tg" id="btnStudyWin" style="border-color:#3ecf7a;color:#84e8ae;font-weight:700" title="지적확인환호·고장시 조치(5장 62개)·구술(6장 82개)·신호취급·실제선로 텍스트+시연 공부모드">📚 공부모드</button>
   </div></div>
   <div class="hgroup hgroup-views"><span class="hgroup-label">화면</span><div class="hgroup-actions">
@@ -2332,7 +2343,7 @@ body.drv-imm.m-phone .mph-ov{display:block;position:absolute;inset:0;z-index:5;p
     <div class="rsz" data-rsz="r"></div>
   </aside>
 </div>
-<footer><span class="badge b-info" id="mbadge">대기</span><span id="msg">시작: 위쪽 'PTS 전원' 칩(또는 좌측 보조제어함 키)으로 전원을 켠 뒤, 3D 운전실의 점을 눌러 조작하세요.</span><span id="stepbar"></span><span class="cpy" id="cpy" title="저작권 정보">© 2026 이한주 · <b class="verb">v11 · 10-28</b></span></footer>
+<footer><span class="badge b-info" id="mbadge">대기</span><span id="msg">시작: 위쪽 'PTS 전원' 칩(또는 좌측 보조제어함 키)으로 전원을 켠 뒤, 3D 운전실의 점을 눌러 조작하세요.</span><span id="stepbar"></span><span class="cpy" id="cpy" title="저작권 정보">© 2026 이한주 · <b class="verb">v12 · 10-28</b></span></footer>
 </div>
 <div class="modal" id="modal"></div>
 <div class="rmt" id="remote" hidden><span id="rmBig" hidden></span><span id="rmXt" hidden></span></div>
@@ -9946,7 +9957,8 @@ const RT = (() => {
         <button class="rt-btn skip" data-rt-cmd="skipPrep" title="기동점검 1~10단계 전체 즉시 스킵 및 출고 완료 세팅">⚡ 기동점검 스킵 (출고완료)</button>
         <button class="rt-btn auto ${autoPilot?'on':''}" data-rt-cmd="autoToggle" title="교재 제4장 기본 운전 취급법에 따라 자동으로 열차를 운행합니다">${autoPilot?'🤖 자동운전 시연 중 (정지)':'🤖 교재 정석 자동운전'}</button>
         <button class="rt-btn" data-rt-cmd="resetSeg" title="현재 역 출발선으로 리셋">↺ 구간 리셋</button>
-        <a class="rt-btn" id="rtScriptLink" href="../sanbon/#${new URLSearchParams({line4: seg.id, dir, seg: segIdx, from: seg.from, to: seg.to}).toString()}" title="산본상선 기동 시나리오 앱에서 이 구간 대본(지적확인·통화) 보기" style="text-decoration:none">📜 대본</a>
+        <a class="rt-btn" id="rtScriptLink" href="../sanbon/#${new URLSearchParams({line4: seg.id, dir, seg: segIdx, from: seg.from, to: seg.to}).toString()}" title="산본상선 기동 시나리오에서 이 구간 대본(지적확인·통화) 보기" style="text-decoration:none">📜 대본</a>
+        <button class="rt-btn" data-scn="1" title="산본상선 기동 시나리오 탭 열기">📋 시나리오</button>
         <select id="rtScenSel" aria-label="교재 5장 이례상황 연습" title="교재 제5장 노선 이례사항 시나리오를 현재 구간에 주입하여 연습합니다">
           <option value="">🎯 5장 고장·이례상황 즉시 시연 (선택)</option>
           <option value="sig_stop">5.1 ATS 출발신호 정지(R0) → 제동 4단·ASOS(25km/h↓)</option>
@@ -10226,8 +10238,7 @@ const RT = (() => {
 // 상단 헤더 버튼 및 단축키 연결
 document.getElementById('btnSkipPrep').onclick = () => skipStartupInspection();
 // v11: 산본상선 시나리오 앱에서 넘어오는 구간 링크 (?dir=up&seg=0 | ?from=산본&to=금정, &prep=1, &auto=1)
-(function(){
-  const q = new URLSearchParams(location.search + '&' + location.hash.replace(/^#/, ''));
+window.L4_openSeg = function(q){
   if(!q.has('seg') && !q.has('from')) return;
   const d = q.get('dir') === 'down' ? 'down' : 'up';
   let i = q.has('seg') ? parseInt(q.get('seg'), 10) : RT.findSeg(d, q.get('from'), q.get('to'));
@@ -10240,8 +10251,10 @@ document.getElementById('btnSkipPrep').onclick = () => skipStartupInspection();
       if(q.get('auto') === '1' && !RT.isAuto()) RT.toggleAuto();
     }catch(e){ console.warn('[line4 링크] 구간 이동 실패', e); }
   };
-  if(document.readyState === 'complete') setTimeout(run, 300); else window.addEventListener('load', () => setTimeout(run, 300));
-})();
+  if(document.readyState === 'complete') setTimeout(run, 50); else window.addEventListener('load', () => setTimeout(run, 300));
+};
+window.L4_openSeg(new URLSearchParams(location.search + '&' + location.hash.replace(/^#/, '')));
+if(new URLSearchParams(location.search).get('tab') === 'scn') window.addEventListener('load', () => setTimeout(() => window.L4_openScenario && L4_openScenario(''), 300));
 document.getElementById('btnRoute').onclick = () => {
   go(S.panel === 'V_FRONT' ? 'V_SCAN' : 'V_FRONT');
   document.getElementById('btnRoute').classList.toggle('on', S.panel === 'V_FRONT');
@@ -11237,6 +11250,57 @@ setInterval(() => {
 })();
 
 reset(); D=derive(); G.prevOk=gCheck(gStep()); applyUI(); renderStage(); renderLeft(); renderInspector(); requestAnimationFrame(tick);
+</script>
+
+<script>
+/* v12: 산본상선 시나리오 탭 (../sanbon/ 를 같은 출처 iframe으로) */
+(function(){
+  let pan = null, fr = null, loaded = false;
+  function build(){
+    if(pan) return;
+    pan = document.createElement('div'); pan.id = 'scnPanel';
+    pan.innerHTML = '<div class="scn-hd"><button type="button" class="go" data-scn-close="1">← 운전으로</button><b>📋 산본상선 기동 시나리오</b><button type="button" data-scn-reload="1" title="새로고침">↻</button></div>';
+    fr = document.createElement('iframe'); fr.title = '산본상선 기동 시나리오'; fr.setAttribute('allow', 'screen-wake-lock; autoplay');
+    pan.appendChild(fr); document.body.appendChild(pan);
+    pan.addEventListener('click', e => {
+      if(e.target.closest('[data-scn-close]')) close();
+      else if(e.target.closest('[data-scn-reload]')) try{ fr.contentWindow.location.reload(); }catch(_){}
+    });
+    fr.addEventListener('load', () => { loaded = true; hook(); });
+  }
+  // 탭 안의 '🚆 운전해 보기'(../line4/?...) 를 새 탭 대신 이 화면에서 연다
+  function hook(){
+    let doc; try{ doc = fr.contentDocument; }catch(_){ return; }
+    if(!doc || doc.__l4hook) return; doc.__l4hook = true;
+    doc.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if(!a) return;
+      const u = new URL(a.getAttribute('href'), doc.baseURI);
+      if(!/\/line4\/?(index\.html)?$/.test(u.pathname)) return;
+      e.preventDefault(); e.stopPropagation();
+      close();
+      if(window.L4_openSeg) window.L4_openSeg(new URLSearchParams(u.search + '&' + u.hash.replace(/^#/, '')));
+    }, true);
+  }
+  function open(hash){
+    build();
+    const base = '../sanbon/';
+    if(!loaded && !fr.src) fr.src = base + (hash ? '#' + hash : '');
+    else if(hash){ try{ fr.contentWindow.location.hash = hash; }catch(_){ fr.src = base + '#' + hash; } }
+    pan.classList.add('on');
+    try{ if(window.RT && RT.isAuto && RT.isAuto()) RT.stopAuto(); }catch(_){}
+  }
+  function close(){ if(pan) pan.classList.remove('on'); }
+  window.L4_openScenario = open;
+  document.addEventListener('click', e => {
+    const s = e.target.closest && e.target.closest('#rtScriptLink, [data-scn]');
+    if(!s || (pan && pan.contains(s))) return;
+    e.preventDefault();
+    if(s.id === 'rtScriptLink'){ const href = s.getAttribute('href') || ''; open(href.split('#')[1] || ''); }
+    else open('');
+  }, true);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && pan && pan.classList.contains('on')){ close(); e.stopPropagation(); } }, true);
+})();
 </script>
 </body>
 </html>
