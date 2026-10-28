@@ -358,6 +358,8 @@ const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.par
 let opt=Object.assign({hl:true,th:'dark'},ls.get('sbu5.opt',{}));
 document.documentElement.dataset.theme=opt.th;
 let st=0,F=[],p=0;
+// 4호선 시뮬레이터 연계: 상선 seg 0=산본→금정 … 9=선바위→남태령
+const simURL=(si,prep)=>'../line4/?dir=up&seg='+si+(prep?'&prep=1':'');
 function build(s){const pre=opt.prep===false?[]:PREP.map(p=>({s:0,at:'산본역 출고 · 준비점검 '+p.no,t:p.title,prep:1,scr:{lines:p.lines,tip:'교재 3장 준비 점검 ('+p.no+')',src:[]}}));return pre.concat(SC[s].items.filter(x=>opt.hl||!x.hl))}
 function scrOf(it){return it.scr||(SCR[st]||{})[SC[st].items.indexOf(it)]}
 const shortT=t=>t.length>10?t.slice(0,10)+'…':t;
@@ -452,6 +454,7 @@ function render(){
   $('#lines').innerHTML=lh;
   let lk='';if(sc&&sc.src&&sc.src.length)lk+='<span class="tag lnk" data-raw="'+sc.src.join(',')+'">📄 5장 '+sc.src.join('·')+' 원문</span><span class="tag lnk" data-st="'+sc.src.join(',')+'">📋 학습표</span>';
   if(it.k6)lk+='<span class="tag lnk" data-oral="'+it.k6.join(',')+'">📖 구술 '+it.k6.join('·')+'</span>';
+  lk+=it.prep?'<a class="tag lnk" href="'+simURL(0,0)+'" target="_blank" rel="noopener">🚆 기동점검부터 운전해 보기</a>':'<a class="tag lnk" href="'+simURL(it.end?9:si,1)+'" target="_blank" rel="noopener">🚆 이 구간 운전해 보기</a>';
   $('#links').innerHTML=lk;$('#card').scrollTop=0;
   $('#guide').classList.toggle('min',!!opt.min||!!it.prep);
   $('#gSec').textContent=sec.n+'  '+(DIST[si]?DIST[si].toLocaleString()+'m':'');$('#gWarn').textContent=/제동 주의/.test(sec.g||'')?'제동 주의':'';$('#gWarn').style.display=$('#gWarn').textContent?'':'none';
@@ -483,7 +486,7 @@ function micStop(){micOn=false;try{rec&&rec.stop()}catch(_){};$('#bMic').classLi
 $('#bMic').onclick=e=>{e.stopPropagation();micOn?micStop():micStart()};
 $('#bHome').addEventListener('click',()=>{if(micOn)micStop()});
 function go(d){const np=Math.max(0,Math.min(F.length-1,p+d));if(np===p)return;p=np;render();try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
-$('#card').addEventListener('click',e=>{const s_=e.target.closest('[data-st]');if(s_){openSt(s_.dataset.st.split(','));return}const r=e.target.closest('[data-raw]');if(r){openRaw(r.dataset.raw.split(','));return}const t=e.target.closest('[data-oral]');if(t){openOral(t.dataset.oral.split(','));return}go(e.clientX<innerWidth*0.33?-1:1)});
+$('#card').addEventListener('click',e=>{if(e.target.closest('a[href]'))return;const s_=e.target.closest('[data-st]');if(s_){openSt(s_.dataset.st.split(','));return}const r=e.target.closest('[data-raw]');if(r){openRaw(r.dataset.raw.split(','));return}const t=e.target.closest('[data-oral]');if(t){openOral(t.dataset.oral.split(','));return}go(e.clientX<innerWidth*0.33?-1:1)});
 $('#guide').onclick=e=>{if(e.target.closest('#gTog')){opt.min=!opt.min;ls.set('sbu5.opt',opt);applyMin();return}const j=e.target.closest('[data-j]');if(j){p=+j.dataset.j;render();return}if(e.target.closest('#flow,#legend'))return;go(1)};
 function applyMin(){$('#guide').classList.toggle('min',!!opt.min);$('#gTog').textContent=opt.min?'▴':'▾';fade()}
 function fade(){const c=$('#card');$('#cardWrap').style.setProperty('--fade',c.scrollHeight-c.scrollTop-c.clientHeight>8?1:0)}
@@ -517,7 +520,7 @@ document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{if(b.dataset.
 $('#bList').onclick=()=>{let h='',ls_=-1;F.forEach((x,i)=>{if(x.prep&&ls_!=='p'){h+='<div class="li sh">준비점검 (교재 3장)</div>';ls_='p'}else if(!x.prep&&x.s!==ls_&&!x.end){h+='<div class="li sh">'+esc(SEC[x.s].n)+'</div>';ls_=x.s}h+='<div class="li'+(x.hl?' hl':'')+(i===p?' cur':'')+'" data-i="'+i+'"><div class="s">'+(i+1)+'. '+esc(x.at)+'</div><div class="t">'+esc(x.t)+'</div></div>'});
  $('#listB').innerHTML=h;show('ovList');const c=$('#listB .cur');if(c)c.scrollIntoView({block:'center'})};
 $('#listB').onclick=e=>{const t=e.target.closest('[data-i]');if(!t)return;p=+t.dataset.i;render();$('#ovList').classList.remove('show')};
-function tipTable(d){let h='<table>';if(d==='up')SEC.forEach((s,i)=>h+='<tr><td>'+esc(s.n)+'</td><td>'+s.tip+(s.g?' <span style="color:var(--warn)">('+esc(s.g)+')</span>':'')+'<div style="margin-top:6px">'+gradHTML(i)+'</div></td></tr>');else DN.forEach(r=>h+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>');$('#tipB').innerHTML=h+'</table>';document.querySelectorAll('#tipSeg button').forEach(b=>b.classList.toggle('on',b.dataset.d===d))}
+function tipTable(d){let h='<table>';if(d==='up')SEC.forEach((s,i)=>h+='<tr id="tipU'+i+'"><td>'+esc(s.n)+'<div style="margin-top:6px"><a class="tag lnk" href="'+simURL(i,1)+'" target="_blank" rel="noopener">🚆 운전해 보기</a></div></td><td>'+s.tip+(s.g?' <span style="color:var(--warn)">('+esc(s.g)+')</span>':'')+'<div style="margin-top:6px">'+gradHTML(i)+'</div></td></tr>');else DN.forEach(r=>h+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>');$('#tipB').innerHTML=h+'</table>';document.querySelectorAll('#tipSeg button').forEach(b=>b.classList.toggle('on',b.dataset.d===d))}
 document.querySelectorAll('#tipSeg button').forEach(b=>b.onclick=()=>tipTable(b.dataset.d));
 let quiz=false,only=null;
 function dicHTML(f){f=(f||'').toLowerCase();let h='';
@@ -639,6 +642,14 @@ $('#dicB').onclick=e=>{const fv=e.target.closest('[data-fav]');if(fv){favT(fv.da
 async function wake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen')}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('#run').classList.contains('show'))wake()});
 homeUI();
+// 시뮬레이터 '📜 대본' → #line4=UP_01&dir=up&seg=0&from=산본&to=금정
+function fromHash(){const h=decodeURIComponent(location.hash.slice(1));if(!/line4=|seg=|from=/.test(h))return;const q={};h.split('&').forEach(x=>{const i=x.indexOf('=');if(i>0)q[x.slice(0,i)]=x.slice(i+1)});
+ if(q.dir&&q.dir!=='up'){tipTable('dn');show('ovTip');return}
+ let si=q.seg!=null&&q.seg!==''?+q.seg:-1;const nm=s=>(s||'').replace('정부과천청사','정부과천');if(!(si>=0&&si<=9)&&q.from){const a=STN.indexOf(nm(q.from));if(a>=0&&a<=9)si=a}
+ if(!(si>=0&&si<=9)){tipTable('up');show('ovTip');$('#tipB').scrollTop=0;return}
+ const r=ls.get('sbu5.pos',null);const s=r?r.st:0;const L=build(s);const k=L.findIndex(x=>!x.prep&&!x.end&&x.s===si);
+ if(k>=0){document.querySelectorAll('.ov.show').forEach(o=>o.classList.remove('show'));start(s,k)}else{tipTable('up');show('ovTip');const row=document.getElementById('tipU'+si);if(row)row.scrollIntoView({block:'start'})}}
+fromHash();addEventListener('hashchange',fromHash);
 </script>
 </body>
 </html>
