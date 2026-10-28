@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>PTS 운전실 재구성 v10</title>
+<title>PTS 운전실 재구성 v11</title>
 <!-- PTS 운전실 재구성 · 제작 이한주 · © 2026 이한주. All rights reserved. 무단 복제·배포·수정·역설계를 금합니다.
      교재 내용 출처: 국토교통부 「철도차량 운전면허 표준교재」(제2종 전기차량, 기능교재 2023.09.06. 개정) — 교재 내용의 저작권은 원저작권자에게 있습니다. -->
 <meta name="author" content="이한주">
@@ -2332,7 +2332,7 @@ body.drv-imm.m-phone .mph-ov{display:block;position:absolute;inset:0;z-index:5;p
     <div class="rsz" data-rsz="r"></div>
   </aside>
 </div>
-<footer><span class="badge b-info" id="mbadge">대기</span><span id="msg">시작: 위쪽 'PTS 전원' 칩(또는 좌측 보조제어함 키)으로 전원을 켠 뒤, 3D 운전실의 점을 눌러 조작하세요.</span><span id="stepbar"></span><span class="cpy" id="cpy" title="저작권 정보">© 2026 이한주 · <b class="verb">v10 · 10-28</b></span></footer>
+<footer><span class="badge b-info" id="mbadge">대기</span><span id="msg">시작: 위쪽 'PTS 전원' 칩(또는 좌측 보조제어함 키)으로 전원을 켠 뒤, 3D 운전실의 점을 눌러 조작하세요.</span><span id="stepbar"></span><span class="cpy" id="cpy" title="저작권 정보">© 2026 이한주 · <b class="verb">v11 · 10-28</b></span></footer>
 </div>
 <div class="modal" id="modal"></div>
 <div class="rmt" id="remote" hidden><span id="rmBig" hidden></span><span id="rmXt" hidden></span></div>
@@ -9946,6 +9946,7 @@ const RT = (() => {
         <button class="rt-btn skip" data-rt-cmd="skipPrep" title="기동점검 1~10단계 전체 즉시 스킵 및 출고 완료 세팅">⚡ 기동점검 스킵 (출고완료)</button>
         <button class="rt-btn auto ${autoPilot?'on':''}" data-rt-cmd="autoToggle" title="교재 제4장 기본 운전 취급법에 따라 자동으로 열차를 운행합니다">${autoPilot?'🤖 자동운전 시연 중 (정지)':'🤖 교재 정석 자동운전'}</button>
         <button class="rt-btn" data-rt-cmd="resetSeg" title="현재 역 출발선으로 리셋">↺ 구간 리셋</button>
+        <a class="rt-btn" id="rtScriptLink" href="../sanbon/#${new URLSearchParams({line4: seg.id, dir, seg: segIdx, from: seg.from, to: seg.to}).toString()}" title="산본상선 기동 시나리오 앱에서 이 구간 대본(지적확인·통화) 보기" style="text-decoration:none">📜 대본</a>
         <select id="rtScenSel" aria-label="교재 5장 이례상황 연습" title="교재 제5장 노선 이례사항 시나리오를 현재 구간에 주입하여 연습합니다">
           <option value="">🎯 5장 고장·이례상황 즉시 시연 (선택)</option>
           <option value="sig_stop">5.1 ATS 출발신호 정지(R0) → 제동 4단·ASOS(25km/h↓)</option>
@@ -10207,6 +10208,8 @@ const RT = (() => {
   return {
     mount, tick, drawForwardOnly, nextStationLabel, curSeg, toggleDoors, runScenarioDemo, drv: DRV, cfg: wCfg, saveCfg: saveWCfg,
     trainset(){ return BVE_LINE4.trainsets[trainsetIdx]; },
+    load(d, i){ dir = d === 'down' ? 'down' : 'up'; loadSegment(Math.max(0, i|0), true); },
+    findSeg(d, from, to){ return (ROUTE_DB[d === 'down' ? 'down' : 'up'] || []).findIndex(s => s.from === from && s.to === to); },
     isAuto(){ return autoPilot; },
     stopAuto(){ autoPilot = false; },
     toggleAuto(){ handleCmd('autoToggle'); },
@@ -10222,6 +10225,23 @@ const RT = (() => {
 
 // 상단 헤더 버튼 및 단축키 연결
 document.getElementById('btnSkipPrep').onclick = () => skipStartupInspection();
+// v11: 산본상선 시나리오 앱에서 넘어오는 구간 링크 (?dir=up&seg=0 | ?from=산본&to=금정, &prep=1, &auto=1)
+(function(){
+  const q = new URLSearchParams(location.search + '&' + location.hash.replace(/^#/, ''));
+  if(!q.has('seg') && !q.has('from')) return;
+  const d = q.get('dir') === 'down' ? 'down' : 'up';
+  let i = q.has('seg') ? parseInt(q.get('seg'), 10) : RT.findSeg(d, q.get('from'), q.get('to'));
+  if(!(i >= 0)) i = 0;
+  const run = () => {
+    try{
+      go('V_FRONT');
+      if(q.get('prep') === '1' || q.get('auto') === '1') skipStartupInspection({silent:true});
+      RT.load(d, i);
+      if(q.get('auto') === '1' && !RT.isAuto()) RT.toggleAuto();
+    }catch(e){ console.warn('[line4 링크] 구간 이동 실패', e); }
+  };
+  if(document.readyState === 'complete') setTimeout(run, 300); else window.addEventListener('load', () => setTimeout(run, 300));
+})();
 document.getElementById('btnRoute').onclick = () => {
   go(S.panel === 'V_FRONT' ? 'V_SCAN' : 'V_FRONT');
   document.getElementById('btnRoute').classList.toggle('on', S.panel === 'V_FRONT');
